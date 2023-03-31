@@ -70,7 +70,10 @@ export default {
       this.setCoumnShow();
     },
     setCoumnShow() {
-      this.$emit("reset");
+      const headers = this.list_column_show.map((x) => {
+        return x.text;
+      });
+      this.$emit("reset", headers);
       this.show = false;
     },
   },

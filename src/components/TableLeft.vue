@@ -221,7 +221,10 @@
                 {{ item.type }}
               </td>
               <td class="text-row" v-else></td>
-              <td class="text-row" v-if="item.type == 'TREND' && trend">
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('24H')"
+              >
                 <span :class="getColor(getState(item?.signals, `24h`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -236,7 +239,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'MACD' && macd">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'MACD' && macd && filterColumn('24H')"
+              >
                 <span :class="getColor(getState(item?.signals, `24h`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -251,7 +257,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'RSI' && rsi">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('24H')"
+              >
                 <span :class="getColor(getState(item?.signals, `24h`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -266,9 +275,12 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else></td>
+              <!-- <td v-else></td> -->
 
-              <td class="text-row" v-if="item.type == 'TREND' && trend">
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('4H')"
+              >
                 <span :class="getColor(getState(item?.signals, `4h`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -283,7 +295,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'MACD' && macd">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'MACD' && macd && filterColumn('4H')"
+              >
                 <span :class="getColor(getState(item?.signals, `4h`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -298,7 +313,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'RSI' && rsi">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('4H')"
+              >
                 <span :class="getColor(getState(item?.signals, `4h`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -313,9 +331,12 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else></td>
+              <!-- <td v-else></td> -->
 
-              <td class="text-row" v-if="item.type == 'TREND' && trend">
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('1H')"
+              >
                 <span :class="getColor(getState(item?.signals, `1h`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -330,7 +351,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'MACD' && macd">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'MACD' && macd && filterColumn('1H')"
+              >
                 <span :class="getColor(getState(item?.signals, `1h`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -345,7 +369,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'RSI' && rsi">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('1H')"
+              >
                 <span :class="getColor(getState(item?.signals, `1h`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -360,9 +387,12 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else></td>
+              <!-- <td class="text-row" v-else></td> -->
 
-              <td class="text-row" v-if="item.type == 'TREND' && trend">
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('30 Min')"
+              >
                 <span :class="getColor(getState(item?.signals, `30min`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -377,7 +407,12 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'MACD' && macd">
+              <td
+                class="text-row"
+                v-else-if="
+                  item.type == 'MACD' && macd && filterColumn('30 Min')
+                "
+              >
                 <span :class="getColor(getState(item?.signals, `30min`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -392,7 +427,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'RSI' && rsi">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('30 Min')"
+              >
                 <span :class="getColor(getState(item?.signals, `30min`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -407,9 +445,12 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else></td>
+              <!-- <td v-else></td> -->
 
-              <td class="text-row" v-if="item.type == 'TREND' && trend">
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('15 Min')"
+              >
                 <span :class="getColor(getState(item?.signals, `15min`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -424,7 +465,12 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'MACD' && macd">
+              <td
+                class="text-row"
+                v-else-if="
+                  item.type == 'MACD' && macd && filterColumn('15 Min')
+                "
+              >
                 <span :class="getColor(getState(item?.signals, `15min`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -439,7 +485,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'RSI' && rsi">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('15 Min')"
+              >
                 <span :class="getColor(getState(item?.signals, `15min`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -454,9 +503,12 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else></td>
+              <!-- <td v-else></td> -->
 
-              <td class="text-row" v-if="item.type == 'TREND' && trend">
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('5 Min')"
+              >
                 <span :class="getColor(getState(item?.signals, `5min`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -471,7 +523,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'MACD' && macd">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'MACD' && macd && filterColumn('5 Min')"
+              >
                 <span :class="getColor(getState(item?.signals, `5min`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -486,7 +541,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else-if="item.type == 'RSI' && rsi">
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('5 Min')"
+              >
                 <span :class="getColor(getState(item?.signals, `5min`))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
@@ -501,7 +559,7 @@
                   </v-tooltip>
                 </span>
               </td>
-              <td class="text-row" v-else></td>
+              <!-- <td v-else></td> -->
             </tr>
           </tbody>
         </template>
@@ -514,7 +572,7 @@
     <ColumnDialog
       ref="columnDialog"
       :listFields="listFields"
-      @reset="initialize()"
+      @reset="reset"
     ></ColumnDialog>
   </v-col>
 </template>
@@ -545,15 +603,25 @@ export default {
   },
   data: () => ({
     search: "",
+    oldHeaders: [
+      { sortable: true, text: "", value: "symbol_name", width: "16%" },
+      { sortable: false, text: "", value: "type" },
+      { sortable: false, text: "24H", align: "center" },
+      { sortable: false, text: "4H", align: "center" },
+      { sortable: false, text: "1H", align: "center" },
+      { sortable: false, text: "30 Min", align: "center" },
+      { sortable: false, text: "15 Min", align: "center" },
+      { sortable: false, text: "5 Min", align: "center" },
+    ],
     headers: [
-      { sortable: true, text: "", value: "symbol_name" },
-      { sortable: false, text: "", value: "type", width: "12%" },
-      { sortable: false, text: "24H", width: "12%", align: "center" },
-      { sortable: false, text: "4H", width: "12%", align: "center" },
-      { sortable: false, text: "1H", width: "12%", align: "center" },
-      { sortable: false, text: "30 Min", width: "12%", align: "center" },
-      { sortable: false, text: "15 Min", width: "12%", align: "center" },
-      { sortable: false, text: "5 Min", width: "12%", align: "center" },
+      { sortable: true, text: "", value: "symbol_name", width: "16%" },
+      { sortable: false, text: "", value: "type" },
+      { sortable: false, text: "24H", align: "center" },
+      { sortable: false, text: "4H", align: "center" },
+      { sortable: false, text: "1H", align: "center" },
+      { sortable: false, text: "30 Min", align: "center" },
+      { sortable: false, text: "15 Min", align: "center" },
+      { sortable: false, text: "5 Min", align: "center" },
     ],
     getSrc,
     getRandom,
@@ -593,8 +661,32 @@ export default {
         value: "5 min",
       },
     ],
+    selectedHeaders: ["24H", "4H", "1H", "30 Min", "15 Min", "5 Min"],
   }),
+  watch: {
+    selectedHeaders: {
+      handler(value) {
+        const temp1 = value.map((x) => x);
+        let temp2 = this.oldHeaders.map((x) => {
+          return x.text;
+        });
+        temp2 = temp2.filter((x) => x);
+        if (this.arraysEqual(temp1, temp2)) this.headers = this.oldHeaders;
+        else {
+          this.headers = this.headers.filter((x) => {
+            if (x.text.length > 0) return value.includes(x.text);
+            else return true;
+          });
+        }
+      },
+    },
+  },
+  computed: {},
   methods: {
+    filterColumn(text) {
+      if (this.headers.find((x) => x.text == text)) return true;
+      return false;
+    },
     showPopup(item) {
       const data = axios.post(
         "https://app.fidata.pro/api/quantifycrypto-coin",
@@ -629,6 +721,13 @@ export default {
     onFilterColumn() {
       this.$refs.columnDialog.open();
     },
+    reset(value) {
+      this.selectedHeaders = value;
+    },
+    arraysEqual(a1, a2) {
+      /* WARNING: arrays must not contain {objects} or behavior may be undefined */
+      return JSON.stringify(a1) == JSON.stringify(a2);
+    },
   },
 };
 </script>
@@ -638,5 +737,8 @@ export default {
 }
 .btn-default {
   background-color: rgb(81, 76, 76) !important;
+}
+td {
+  text-align: center;
 }
 </style>
