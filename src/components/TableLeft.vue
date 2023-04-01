@@ -2,11 +2,11 @@
   <v-col cols="12" sm="7">
     <h2 class="white--text my-4">Bullish and Bearish Crypto Signals</h2>
     <v-card :loading="loadingTable" color="#1e1e1e">
-      <template slot="progress">
+      <template v-if="count == 1" slot="progress">
         <v-progress-linear color="#6164ff" indeterminate></v-progress-linear>
       </template>
 
-      <div style="width: 100%" v-if="!loadingTable">
+      <div style="width: 100%" v-if="count != 1">
         <v-text-field
           label="Search ..."
           append-icon="mdi-magnify"
@@ -60,6 +60,7 @@
           >
             <span style="color: rgb(97, 100, 255); font-size: 12px"> RSI </span>
           </v-btn>
+
           <div style="width: 5%; display: inline-block"></div>
           <v-btn depressed @click="onFilterColumn()">
             <div class="d-flex">
@@ -90,37 +91,70 @@
               </div>
             </div>
           </v-btn>
+
+          <v-btn
+            depressed
+            @click="clickFavorite()"
+            :color="check_favorite ? '#6164ff' : 'default'"
+          >
+            <div class="d-flex">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                role="img"
+                aria-hidden="true"
+                class="v-icon__svg"
+              >
+                <path
+                  d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                ></path>
+              </svg>
+              <div class="mt-auto">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  role="img"
+                  aria-hidden="true"
+                  class="v-icon__svg"
+                  style="font-size: 14px; height: 14px; width: 14px"
+                >
+                  <path
+                    d="M12,17C10.89,17 10,16.1 10,15C10,13.89 10.89,13 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
+                  ></path>
+                </svg>
+              </div>
+            </div>
+          </v-btn>
         </div>
         <!-- <div style="width: 15%; display: inline-block">
 
         </div> -->
       </div>
 
-      <v-card-title
-        class="d-flex justify-center align-center"
-        v-if="loadingTable"
-      >
-        <p class="white--text text-caption mx-auto my-0">
-          Loading table... Please wait
-        </p>
-      </v-card-title>
       <v-data-table
-        v-else
         :search="search"
         :custom-filter="customSearch"
         dark
         dense
-        :loading="loadingTable"
         class="elevation-1"
         sort-by="calories"
         :items-per-page="30"
         :footer-props="{
           'items-per-page-options': [30],
         }"
+        :loading="loadingTable"
         :page="1"
         :headers="headers"
         :items="items"
       >
+        <template slot="progress">
+          <v-progress-linear
+            absolute
+            v-show="count > 1"
+            color="#6164ff"
+            indeterminate
+          ></v-progress-linear>
+        </template>
         <template v-slot:headers="{ headers }">
           <thead>
             <tr>
@@ -132,7 +166,7 @@
         </template>
 
         <template v-slot:body="{ items }">
-          <tbody>
+          <tbody v-if="!check_favorite">
             <tr v-for="(item, index) in items" :key="index">
               <td class="text-row" v-if="index % 3 === 0" rowspan="3">
                 <v-tooltip top>
@@ -143,6 +177,38 @@
                       @click="showPopup(item.coin_symbol)"
                       class="d-flex align-center justify-evenly coin-name"
                     >
+                      <v-btn
+                        small
+                        width="40"
+                        depressed
+                        @click.stop="addFavorite(item)"
+                        class="mr-2"
+                        color="transparent"
+                      >
+                        <div
+                          class="d-flex"
+                          style="
+                            position: -webkit-sticky;
+                            position: sticky;
+                            left: 0;
+                          "
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            role="img"
+                            aria-hidden="true"
+                            class="v-icon__svg"
+                            :class="[
+                              checkFavorite(item) ? 'color-favorite' : '',
+                            ]"
+                          >
+                            <path
+                              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </v-btn>
                       <img
                         style="
                           width: 30px;
@@ -220,7 +286,469 @@
               <td class="text-row" v-else-if="item.type == 'RSI' && rsi">
                 {{ item.type }}
               </td>
-              <td class="text-row" v-else></td>
+              <!-- <td class="text-row" v-else></td> -->
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('24H')"
+              >
+                <span :class="getColor(getState(item?.signals, `24h`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "24h") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'MACD' && macd && filterColumn('24H')"
+              >
+                <span :class="getColor(getState(item?.signals, `24h`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "24h") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('24H')"
+              >
+                <span :class="getColor(getState(item?.signals, `24h`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "24h") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <!-- <td v-else></td> -->
+
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('4H')"
+              >
+                <span :class="getColor(getState(item?.signals, `4h`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "4h") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'MACD' && macd && filterColumn('4H')"
+              >
+                <span :class="getColor(getState(item?.signals, `4h`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "4h") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('4H')"
+              >
+                <span :class="getColor(getState(item?.signals, `4h`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "4h") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <!-- <td v-else></td> -->
+
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('1H')"
+              >
+                <span :class="getColor(getState(item?.signals, `1h`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "1h") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'MACD' && macd && filterColumn('1H')"
+              >
+                <span :class="getColor(getState(item?.signals, `1h`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "1h") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('1H')"
+              >
+                <span :class="getColor(getState(item?.signals, `1h`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "1h") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <!-- <td class="text-row" v-else></td> -->
+
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('30 Min')"
+              >
+                <span :class="getColor(getState(item?.signals, `30min`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "30min") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="
+                  item.type == 'MACD' && macd && filterColumn('30 Min')
+                "
+              >
+                <span :class="getColor(getState(item?.signals, `30min`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "30min") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('30 Min')"
+              >
+                <span :class="getColor(getState(item?.signals, `30min`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "30min") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <!-- <td v-else></td> -->
+
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('15 Min')"
+              >
+                <span :class="getColor(getState(item?.signals, `15min`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "15min") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="
+                  item.type == 'MACD' && macd && filterColumn('15 Min')
+                "
+              >
+                <span :class="getColor(getState(item?.signals, `15min`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "15min") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('15 Min')"
+              >
+                <span :class="getColor(getState(item?.signals, `15min`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "15min") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <!-- <td v-else></td> -->
+
+              <td
+                class="text-row"
+                v-if="item.type == 'TREND' && trend && filterColumn('5 Min')"
+              >
+                <span :class="getColor(getState(item?.signals, `5min`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "5min") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'MACD' && macd && filterColumn('5 Min')"
+              >
+                <span :class="getColor(getState(item?.signals, `5min`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "5min") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <td
+                class="text-row"
+                v-else-if="item.type == 'RSI' && rsi && filterColumn('5 Min')"
+              >
+                <span :class="getColor(getState(item?.signals, `5min`))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-bind="attrs" v-on="on">
+                        {{ getState(item?.signals, "5min") }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+              <!-- <td v-else></td> -->
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr v-for="(item, index) in items_favorite" :key="index">
+              <td class="text-row" v-if="index % 3 === 0" rowspan="3">
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <div
+                      v-bind="attrs"
+                      v-on="on"
+                      @click="showPopup(item.coin_symbol)"
+                      class="d-flex align-center justify-evenly coin-name"
+                    >
+                      <v-btn
+                        small
+                        width="40"
+                        depressed
+                        @click.stop="addFavorite(item)"
+                        class="mr-2"
+                        color="transparent"
+                      >
+                        <div
+                          class="d-flex"
+                          style="
+                            position: -webkit-sticky;
+                            position: sticky;
+                            left: 0;
+                          "
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            role="img"
+                            aria-hidden="true"
+                            class="v-icon__svg"
+                            :class="[
+                              checkFavorite(item) ? 'color-favorite' : '',
+                            ]"
+                          >
+                            <path
+                              d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                            ></path>
+                          </svg>
+                        </div>
+                      </v-btn>
+                      <img
+                        style="
+                          width: 30px;
+                          padding-right: 8px;
+                          vertical-align: middle;
+                        "
+                        :src="getSrc(item.coin_symbol)"
+                      />
+                      <div
+                        class="ml-3 text-left"
+                        style="width: 150px; font-size: 17px"
+                      >
+                        {{ item.symbol_name }}
+                        <span class="text-caption">{{ item.coin_symbol }}</span>
+
+                        <div>
+                          <i
+                            v-if="
+                              getColorToChange(item.percent_change_5min) ==
+                              `red--text`
+                            "
+                            style="
+                              font-size: 9px;
+                              color: red;
+                              margin-right: 8px;
+                            "
+                            class="fa-solid fa-chevron-down"
+                          ></i>
+                          <i
+                            v-else
+                            style="
+                              font-size: 9px;
+                              color: green;
+                              margin-right: 8px;
+                            "
+                            class="fa-solid fa-chevron-up"
+                          ></i>
+                          <span
+                            v-bind:class="
+                              getColorToChange(item.percent_change_5min)
+                            "
+                            class="text-subtitle-2 mr-2"
+                            >${{ getPrice(item.coin_price) }}</span
+                          >
+                          <span
+                            class="text-caption"
+                            v-bind:class="
+                              getColorToChange(item.percent_change_5min)
+                            "
+                            >{{ item.percent_change_5min }}</span
+                          >
+                        </div>
+                        <div>
+                          <span class="text-caption mr-1">Technical:</span>
+                          <span
+                            v-bind:class="getColorToScore(item.technical_score)"
+                            class="text-caption"
+                            >{{ item.technical_score }}</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <span class="white--text text-caption"
+                    >Click show details
+                  </span>
+                </v-tooltip>
+              </td>
+              <td class="text-row" v-if="item.type == 'TREND' && trend">
+                {{ item.type }}
+              </td>
+              <td class="text-row" v-else-if="item.type == 'MACD' && macd">
+                {{ item.type }}
+              </td>
+              <td class="text-row" v-else-if="item.type == 'RSI' && rsi">
+                {{ item.type }}
+              </td>
+              <!-- <td class="text-row" v-else></td> -->
               <td
                 class="text-row"
                 v-if="item.type == 'TREND' && trend && filterColumn('24H')"
@@ -600,6 +1128,7 @@ export default {
   props: {
     loadingTable: { type: Boolean, required: true },
     items: { type: Array, required: true },
+    count: { type: Number },
   },
   data: () => ({
     search: "",
@@ -623,6 +1152,8 @@ export default {
       { sortable: false, text: "15 Min", align: "center" },
       { sortable: false, text: "5 Min", align: "center" },
     ],
+    check_favorite: false,
+    items_favorite: [],
     getSrc,
     getRandom,
     getTimeTableRight,
@@ -728,6 +1259,38 @@ export default {
       /* WARNING: arrays must not contain {objects} or behavior may be undefined */
       return JSON.stringify(a1) == JSON.stringify(a2);
     },
+    checkFavorite({ coin_name }) {
+      const list_coin = localStorage.getItem("COIN_FAVORITE");
+      if (!list_coin) return false;
+      return JSON.parse(list_coin).includes(coin_name);
+    },
+    clickFavorite() {
+      this.check_favorite = !this.check_favorite;
+      let items = this.items;
+      if (this.check_favorite) {
+        const check_list_coin = localStorage.getItem("COIN_FAVORITE");
+        if (!check_list_coin) return;
+        const list_coin = JSON.parse(check_list_coin);
+        this.items_favorite = items.filter((x) =>
+          list_coin.includes(x.coin_name)
+        );
+      }
+    },
+    addFavorite({ coin_name }) {
+      const list_coin = localStorage.getItem("COIN_FAVORITE");
+      if (!list_coin) {
+        localStorage.setItem("COIN_FAVORITE", JSON.stringify([coin_name]));
+      } else {
+        let arr = JSON.parse(list_coin);
+        if (arr.includes(coin_name)) {
+          arr = arr.filter((x) => x != coin_name);
+        } else {
+          arr.unshift(coin_name);
+        }
+        localStorage.setItem("COIN_FAVORITE", JSON.stringify(arr));
+        this.$emit("fetch-data");
+      }
+    },
   },
 };
 </script>
@@ -740,5 +1303,11 @@ export default {
 }
 td {
   text-align: center;
+}
+.color-favorite {
+  color: #ff9800;
+}
+.color-default {
+  color: #ffffff;
 }
 </style>

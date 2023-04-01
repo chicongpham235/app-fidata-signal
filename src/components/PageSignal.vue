@@ -1,7 +1,12 @@
 <template>
   <div>
     <v-row>
-      <TableLeft :loading-table="loadingTableLeft" :items="itemsTableLeft" />
+      <TableLeft
+        :count="count"
+        :loading-table="loadingTableLeft"
+        :items="itemsTableLeft"
+        @fetch-data="fetchData"
+      />
       <!-- <TableRight :loading-table="loadingTableRight" :items="itemsTableRight" /> -->
     </v-row>
   </div>
@@ -27,6 +32,7 @@ export default {
     loadingTableRight: false,
     data_coin: [],
     data_signal: [],
+    count: 1,
   }),
   created() {
     this.interval = setInterval(() => {
@@ -56,6 +62,7 @@ export default {
         ...x,
         ...this.data_coin.find((e) => x.coin_symbol == e.coin_symbol),
       }));
+      this.count++;
       this.loadingTableLeft = false;
       this.loadingTableRight = false;
     },
