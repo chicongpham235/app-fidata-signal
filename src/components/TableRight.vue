@@ -3,7 +3,11 @@
     <h2 class="white--text my-4">Alert Strem</h2>
     <v-card :loading="loadingTable" color="#1e1e1e">
       <template slot="progress">
-        <v-progress-linear color="green" indeterminate></v-progress-linear>
+        <v-progress-linear
+          absolute
+          color="#6164ff"
+          indeterminate
+        ></v-progress-linear>
       </template>
 
       <v-card-title
@@ -22,6 +26,9 @@
         :headers="headers"
         :items="items"
         :items-per-page="23"
+        :footer-props="{
+          'items-per-page-options': [23, -1],
+        }"
         hide-default-footer
         class="elevation-1"
       >

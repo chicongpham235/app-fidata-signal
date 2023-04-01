@@ -1,31 +1,34 @@
 <template>
-  <div>
-    <v-row>
-      <TableLeft
-        :count="count"
-        :loading-table="loadingTableLeft"
-        :items="itemsTableLeft"
-        @fetch-data="fetchData"
-      />
-      <!-- <TableRight :loading-table="loadingTableRight" :items="itemsTableRight" /> -->
-    </v-row>
-  </div>
+  <!-- <div> -->
+  <v-row>
+    <TableLeft
+      :count="count"
+      :loading-table="loadingTableLeft"
+      :items="itemsTableLeft"
+      @fetch-data="fetchData"
+      @filter:items-favorite="onFilterFavorite"
+      ref="tableLeft"
+    />
+    <TableRight :loading-table="loadingTableRight" :items="itemsTableRight" />
+  </v-row>
+  <!-- </div> -->
 </template>
 
 <script>
 const TIME_REFRESH = 5 * 60 * 1000;
 // import Popup from "./Popup.vue";
 import TableLeft from "./TableLeft.vue";
-// import TableRight from "./TableRight.vue";
+import TableRight from "./TableRight.vue";
 import axios from "axios";
 
 export default {
   components: {
     // Popup,
     TableLeft,
-    // TableRight,
+    TableRight,
   },
   data: () => ({
+    items: [],
     itemsTableLeft: [],
     itemsTableRight: [],
     loadingTableLeft: false,
@@ -58,10 +61,12 @@ export default {
       this.loadingTableLeft = true;
       this.loadingTableRight = true;
       await Promise.all([this.fetchDataSignal(), this.fetchDataCoin()]);
-      this.itemsTableLeft = this.data_signal.map((x) => ({
+      this.items = this.data_signal.map((x) => ({
         ...x,
         ...this.data_coin.find((e) => x.coin_symbol == e.coin_symbol),
       }));
+      this.itemsTableLeft = this.items;
+      this.itemsTableRight = this.items;
       this.count++;
       this.loadingTableLeft = false;
       this.loadingTableRight = false;
@@ -142,9 +147,13 @@ export default {
         console.error(err);
       }
     },
-    onFilterTREND() {},
-    onFilterRSI() {},
-    onFilterMACD() {},
+    onFilterFavorite(items) {
+      if (this.$refs.tableLeft.check_favorite) {
+        this.itemsTableLeft = items;
+      } else {
+        this.itemsTableLeft = this.items;
+      }
+    },
   },
 };
 </script>
