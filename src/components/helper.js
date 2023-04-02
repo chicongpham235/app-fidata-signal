@@ -1,12 +1,15 @@
+import moment from "moment";
+
 function getRandom() {
   const arr = ["1h", "4h", "24h", "5min", "15min", "30min"];
   const random = Math.floor(Math.random() * arr.length);
   return arr[random];
 }
 function getTimeTableRight(dateTimeString) {
-  const dateObj = new Date(dateTimeString);
-  const timeString = dateObj.toLocaleTimeString("en-US", { hour12: true });
-  return timeString;
+  // const dateObj = new Date(dateTimeString);
+  // const timeString = dateObj.toLocaleTimeString("en-US", { hour12: true });
+  // return timeString;
+  return moment(new Date(dateTimeString).toUTCString()).format("LTS");
 }
 
 function getState(data, condition) {

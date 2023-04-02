@@ -9,17 +9,29 @@
       @filter:items-favorite="onFilterFavorite"
       ref="tableLeft"
     />
-    <TableRight :loading-table="loadingTableRight" :items="itemsTableRight" />
+    <TableRight
+      :count="count"
+      :loading-table="loadingTableRight"
+      :items="itemsTableRight"
+    />
   </v-row>
   <!-- </div> -->
 </template>
 
 <script>
-const TIME_REFRESH = 5 * 60 * 1000;
+const TIME_REFRESH = 10 * 1000;
 // import Popup from "./Popup.vue";
 import TableLeft from "./TableLeft.vue";
 import TableRight from "./TableRight.vue";
 import axios from "axios";
+
+// function getDifference(array1, array2) {
+//   return array1.filter(object1 => {
+//     return !array2.some(object2 => {
+//       return object1.id === object2.id;
+//     });
+//   });
+// }
 
 export default {
   components: {
@@ -30,6 +42,8 @@ export default {
   data: () => ({
     items: [],
     itemsTableLeft: [],
+    itemsTableRightAfter: [],
+    itemsTableRightBefore: [],
     itemsTableRight: [],
     loadingTableLeft: false,
     loadingTableRight: false,
@@ -65,8 +79,71 @@ export default {
         ...x,
         ...this.data_coin.find((e) => x.coin_symbol == e.coin_symbol),
       }));
-      this.itemsTableLeft = this.items;
-      this.itemsTableRight = this.items;
+      this.itemsTableLeft = [...this.items];
+      if (this.itemsTableRightBefore.length == 0) {
+        this.itemsTableRightBefore = this.items.map((x) => {
+          let signals = "{}";
+          if (x?.signals) {
+            signals = JSON.parse(x.signals) ?? "{}";
+            signals = signals.map((x) => {
+              return { interval: x.interval, state: x.state };
+            });
+            signals = JSON.stringify(signals);
+          }
+          return {
+            rank: x.rank,
+            type: x.type,
+            coin_symbol: x.coin_symbol,
+            signals: signals,
+            coin_price: x.coin_price,
+            updated_at: x.updated_at,
+          };
+        });
+      } else {
+        this.itemsTableRightAfter = this.items.map((x) => {
+          let signals = "{}";
+          if (x?.signals) {
+            signals = JSON.parse(x.signals) ?? "{}";
+            signals = signals.map((x) => {
+              return { interval: x.interval, state: x.state };
+            });
+            signals = JSON.stringify(signals);
+          }
+          return {
+            rank: x.rank,
+            type: x.type,
+            coin_symbol: x.coin_symbol,
+            signals: signals,
+            coin_price: x.coin_price,
+            updated_at: x.updated_at,
+          };
+        });
+        for (let index = 0; index < this.itemsTableRightAfter.length; index++) {
+          if (
+            this.itemsTableRightAfter[index].signals &&
+            this.itemsTableRightAfter[index].signals !=
+              this.itemsTableRightBefore[index].signals
+          ) {
+            let before = JSON.parse(this.itemsTableRightBefore[index].signals);
+            let after = JSON.parse(this.itemsTableRightAfter[index].signals);
+            let diff = after.filter((x) => {
+              return before.some(
+                (y) => y.interval == x.interval && y.state != x.state
+              );
+            });
+            diff.forEach((item) => {
+              this.itemsTableRight.push({
+                ...item,
+                ...this.itemsTableRightAfter[index],
+              });
+            });
+          }
+        }
+        this.itemsTableRightBefore = [...this.itemsTableRightAfter];
+      }
+
+      console.log(this.itemsTableRight);
+      console.log(this.count);
       this.count++;
       this.loadingTableLeft = false;
       this.loadingTableRight = false;

@@ -159,8 +159,8 @@
         :page="1"
         :headers="headers"
         :items="items"
-        v-if="count > 1"
-        style="height: calc(100vh - 36px - 48px - 37px); overflow-y: scroll"
+        v-if="count > 1 && items.length > 0"
+        style="height: calc(100vh - 36px - 48px - 37px); overflow-y: auto"
       >
         <template slot="progress">
           <v-progress-linear
@@ -662,7 +662,6 @@ import ColumnDialog from "./ColumnDialog.vue";
 import axios from "axios";
 import {
   getSrc,
-  getRandom,
   getTimeTableRight,
   getColor,
   getState,
@@ -707,7 +706,7 @@ export default {
     check_favorite: false,
     items_favorite: [],
     getSrc,
-    getRandom,
+
     getTimeTableRight,
     getColor,
     getState,
