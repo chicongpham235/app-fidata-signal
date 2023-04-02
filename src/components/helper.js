@@ -9,7 +9,7 @@ function getTimeTableRight(dateTimeString) {
   // const dateObj = new Date(dateTimeString);
   // const timeString = dateObj.toLocaleTimeString("en-US", { hour12: true });
   // return timeString;
-  return moment(new Date(dateTimeString).toUTCString()).format("LTS");
+  return moment(new Date(dateTimeString)).utc().format("LTS");
 }
 
 function getState(data, condition) {
@@ -48,12 +48,13 @@ function getTimeStampToolip(data) {
   const day = date.getUTCDate();
   const month = date.getUTCMonth() + 1;
   const year = date.getUTCFullYear();
-  const hour = date.getUTCHours();
+  const time = date.getUTCHours();
+  const hour = time <= 12 ? time : time - 12;
   const minute = date.getUTCMinutes();
   // const timeZoneOffset = date.getTimezoneOffset() / 60; // Chuyển đổi sang giờ
 
   const formattedDate = `${month}/${day}/${year} ${hour}:${minute} ${
-    hour >= 12 ? "pm" : "am"
+    time >= 12 ? "PM" : "AM"
   } GMT+0`;
   return formattedDate;
 }
