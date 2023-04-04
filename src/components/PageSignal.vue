@@ -31,7 +31,7 @@ const TIME_REFRESH = 5 * 60 * 1000;
 import TableLeft from "./TableLeft.vue";
 import TableRight from "./TableRight.vue";
 import axios from "axios";
-import { getRandom } from "./helper";
+import { getRandom, isJson } from "./helper";
 import { shuffle } from "lodash";
 
 export default {
@@ -53,6 +53,7 @@ export default {
     data_signal: [],
     count: 1,
     getRandom,
+    isJson,
   }),
   created() {
     this.interval = setInterval(() => {
@@ -92,7 +93,9 @@ export default {
             updated_at: x.updated_at,
           };
         });
-        this.itemsTableRightDefault = [...this.itemsTableRightBefore];
+        this.itemsTableRightDefault = [...this.itemsTableRightBefore].filter(
+          (x) => isJson(x.signals)
+        );
         this.itemsTableRightDefault = shuffle(this.itemsTableRightDefault);
         this.itemsTableRightDefault = [
           ...new Map(

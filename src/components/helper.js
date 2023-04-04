@@ -66,6 +66,14 @@ function getSrc(src) {
     ".png"
   );
 }
+function isJson(str) {
+  try {
+    JSON.parse(str);
+  } catch (e) {
+    return false;
+  }
+  return true;
+}
 export {
   getSrc,
   getRandom,
@@ -76,4 +84,5 @@ export {
   getColorToChange,
   getColorToScore,
   getTimeStampToolip,
+  isJson,
 };
