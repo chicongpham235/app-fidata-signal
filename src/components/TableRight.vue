@@ -31,7 +31,11 @@
         }"
         hide-default-footer
         class="elevation-1"
-        style="height: calc(100vh - 36px - 37px); overflow-y: auto"
+        :style="[
+          items.length > 13
+            ? { height: 'calc(100vh - 36px - 37px)', 'overflow-y': 'auto' }
+            : {},
+        ]"
         :loading="loadingTable"
       >
         <template slot="progress">
@@ -106,23 +110,36 @@ export default {
   },
   data: () => ({
     headers: [
-      { sortable: false, width: "30px", text: "Symbol", value: "coin_symbol" },
-      { sortable: false, width: "30px", text: "State", align: "center" },
-      { sortable: false, width: "30px", text: "Type", value: "type" },
-      { sortable: false, width: "30px", text: "Candle", value: "type" },
+      {
+        sortable: false,
+        width: "5%",
+        text: "Symbol",
+        value: "coin_symbol",
+      },
+      { sortable: false, width: "30px", text: "State" },
+      {
+        sortable: false,
+        width: "30px",
+        text: "Type",
+        value: "type",
+      },
+      {
+        sortable: false,
+        width: "30px",
+        text: "Candle",
+        value: "type",
+      },
       {
         sortable: false,
         width: "30px",
         text: "Price",
         value: "coin_price",
-        align: "center",
       },
       {
         sortable: false,
-        width: "30px",
+        width: "18%",
         text: "Time",
         value: "updated_at",
-        align: "center",
       },
     ],
     getSrc,
@@ -145,3 +162,5 @@ export default {
   },
 };
 </script>
+
+<style scoped></style>

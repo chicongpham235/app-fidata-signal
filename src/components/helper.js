@@ -9,7 +9,7 @@ function getTimeTableRight(dateTimeString) {
   // const dateObj = new Date(dateTimeString);
   // const timeString = dateObj.toLocaleTimeString("en-US", { hour12: true });
   // return timeString;
-  return moment(new Date(dateTimeString)).utc().format("LTS");
+  return moment(new Date(dateTimeString)).utc().format("hh:mm A");
 }
 
 function getState(data, condition) {
@@ -44,18 +44,9 @@ function getColorToScore(data) {
   }
 }
 function getTimeStampToolip(data) {
-  const date = new Date(data);
-  const day = date.getUTCDate();
-  const month = date.getUTCMonth() + 1;
-  const year = date.getUTCFullYear();
-  const time = date.getUTCHours();
-  const hour = time <= 12 ? time : time - 12;
-  const minute = date.getUTCMinutes();
-  // const timeZoneOffset = date.getTimezoneOffset() / 60; // Chuyển đổi sang giờ
-
-  const formattedDate = `${month}/${day}/${year} ${hour}:${minute} ${
-    time >= 12 ? "PM" : "AM"
-  } GMT+0`;
+  const formattedDate = `${moment(new Date(data))
+    .utc()
+    .format("MM/DD/YYYY hh:mm A")} GMT+0`;
   return formattedDate;
 }
 function getColor(state) {

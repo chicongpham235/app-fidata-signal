@@ -160,7 +160,14 @@
         :headers="headers"
         :items="items"
         v-if="count > 1 && items.length > 0"
-        style="height: calc(100vh - 36px - 48px - 37px); overflow-y: auto"
+        :style="[
+          items.length > 15
+            ? {
+                height: 'calc(100vh - 36px - 48px - 37px)',
+                'overflow-y': 'auto',
+              }
+            : {},
+        ]"
       >
         <template slot="progress">
           <v-progress-linear

@@ -19,11 +19,12 @@
 </template>
 
 <script>
-const TIME_REFRESH = 10 * 1000;
+const TIME_REFRESH = 5 * 60 * 1000;
 // import Popup from "./Popup.vue";
 import TableLeft from "./TableLeft.vue";
 import TableRight from "./TableRight.vue";
 import axios from "axios";
+import { getRandom } from "./helper";
 
 // function getDifference(array1, array2) {
 //   return array1.filter(object1 => {
@@ -50,6 +51,7 @@ export default {
     data_coin: [],
     data_signal: [],
     count: 1,
+    getRandom,
   }),
   created() {
     this.interval = setInterval(() => {
@@ -61,16 +63,6 @@ export default {
     this.interval = clearInterval(this.interval);
   },
   methods: {
-    async getChangePercentage(coin) {
-      const data = await axios.post(
-        "https://app.fidata.pro/api/quantifycrypto-coin",
-        {
-          symbol: coin,
-        }
-      );
-      return data.data.coin_price;
-    },
-
     async fetchData() {
       this.loadingTableLeft = true;
       this.loadingTableRight = true;
@@ -99,6 +91,24 @@ export default {
             updated_at: x.updated_at,
           };
         });
+        this.itemsTableRight = [...this.itemsTableRightBefore];
+        this.itemsTableRight = [
+          ...new Map(this.itemsTableRight.map((x) => [x["rank"], x])).values(),
+        ].sort((a, b) =>
+          String(b.updated_at).localeCompare(String(a.updated_at))
+        );
+        this.itemsTableRight = this.itemsTableRight.map((x) => {
+          let signals = JSON.parse(x.signals);
+          const random = getRandom();
+          signals = Object.values(signals);
+          const signal = signals.filter(
+            (x) => x.interval == random || x.interval
+          )[0];
+          return { ...x, interval: signal?.interval, state: signal?.state };
+        });
+        this.itemsTableRight = this.itemsTableRight
+          .filter((x) => x.interval && x.state)
+          .slice(0, 30);
       } else {
         this.itemsTableRightAfter = this.items.map((x) => {
           let signals = "{}";
@@ -141,9 +151,6 @@ export default {
         }
         this.itemsTableRightBefore = [...this.itemsTableRightAfter];
       }
-
-      console.log(this.itemsTableRight);
-      console.log(this.count);
       this.count++;
       this.loadingTableLeft = false;
       this.loadingTableRight = false;
