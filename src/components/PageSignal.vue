@@ -10,9 +10,16 @@
       ref="tableLeft"
     />
     <TableRight
+      v-if="itemsTableRight.length > 0"
       :count="count"
       :loading-table="loadingTableRight"
       :items="itemsTableRight"
+    />
+    <TableRight
+      v-else
+      :count="count"
+      :loading-table="loadingTableRight"
+      :items="itemsTableRightDefault"
     />
   </v-row>
   <!-- </div> -->
@@ -39,6 +46,7 @@ export default {
     itemsTableRightAfter: [],
     itemsTableRightBefore: [],
     itemsTableRight: [],
+    itemsTableRightDefault: [],
     loadingTableLeft: false,
     loadingTableRight: false,
     data_coin: [],
@@ -84,14 +92,16 @@ export default {
             updated_at: x.updated_at,
           };
         });
-        this.itemsTableRight = [...this.itemsTableRightBefore];
-        this.itemsTableRight = shuffle(this.itemsTableRight);
-        this.itemsTableRight = [
-          ...new Map(this.itemsTableRight.map((x) => [x["rank"], x])).values(),
+        this.itemsTableRightDefault = [...this.itemsTableRightBefore];
+        this.itemsTableRightDefault = shuffle(this.itemsTableRightDefault);
+        this.itemsTableRightDefault = [
+          ...new Map(
+            this.itemsTableRightDefault.map((x) => [x["rank"], x])
+          ).values(),
         ].sort((a, b) =>
           String(b.updated_at).localeCompare(String(a.updated_at))
         );
-        this.itemsTableRight = this.itemsTableRight.map((x) => {
+        this.itemsTableRightDefault = this.itemsTableRightDefault.map((x) => {
           let signals = JSON.parse(x.signals);
           const random = getRandom();
           signals = Object.values(signals);
@@ -100,7 +110,7 @@ export default {
           )[0];
           return { ...x, interval: signal?.interval, state: signal?.state };
         });
-        this.itemsTableRight = this.itemsTableRight
+        this.itemsTableRightDefault = this.itemsTableRightDefault
           .filter((x) => x.interval && x.state)
           .slice(0, 30);
       } else {
