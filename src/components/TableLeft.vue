@@ -312,7 +312,15 @@
                 class="text-row"
                 v-if="item.type == 'TREND' && trend && filterColumn('24H')"
               >
-                <span :class="getColor(getState(item?.signals, `24h`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `24h`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `24h`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -330,7 +338,15 @@
                 class="text-row"
                 v-else-if="item.type == 'MACD' && macd && filterColumn('24H')"
               >
-                <span :class="getColor(getState(item?.signals, `24h`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `24h`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `24h`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -348,7 +364,15 @@
                 class="text-row"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('24H')"
               >
-                <span :class="getColor(getState(item?.signals, `24h`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `24h`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `24h`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -368,7 +392,15 @@
                 class="text-row"
                 v-if="item.type == 'TREND' && trend && filterColumn('4H')"
               >
-                <span :class="getColor(getState(item?.signals, `4h`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `4h`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `4h`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -386,7 +418,15 @@
                 class="text-row"
                 v-else-if="item.type == 'MACD' && macd && filterColumn('4H')"
               >
-                <span :class="getColor(getState(item?.signals, `4h`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `4h`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `4h`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -404,7 +444,15 @@
                 class="text-row"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('4H')"
               >
-                <span :class="getColor(getState(item?.signals, `4h`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `4h`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `4h`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -424,7 +472,15 @@
                 class="text-row"
                 v-if="item.type == 'TREND' && trend && filterColumn('1H')"
               >
-                <span :class="getColor(getState(item?.signals, `1h`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `1h`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `1h`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -442,7 +498,15 @@
                 class="text-row"
                 v-else-if="item.type == 'MACD' && macd && filterColumn('1H')"
               >
-                <span :class="getColor(getState(item?.signals, `1h`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `1h`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `1h`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -460,7 +524,15 @@
                 class="text-row"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('1H')"
               >
-                <span :class="getColor(getState(item?.signals, `1h`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `1h`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `1h`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -480,7 +552,15 @@
                 class="text-row"
                 v-if="item.type == 'TREND' && trend && filterColumn('30 Min')"
               >
-                <span :class="getColor(getState(item?.signals, `30min`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `30min`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `30min`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -500,7 +580,15 @@
                   item.type == 'MACD' && macd && filterColumn('30 Min')
                 "
               >
-                <span :class="getColor(getState(item?.signals, `30min`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `30min`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `30min`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -518,7 +606,15 @@
                 class="text-row"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('30 Min')"
               >
-                <span :class="getColor(getState(item?.signals, `30min`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `30min`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `30min`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -538,7 +634,15 @@
                 class="text-row"
                 v-if="item.type == 'TREND' && trend && filterColumn('15 Min')"
               >
-                <span :class="getColor(getState(item?.signals, `15min`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `15min`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `15min`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -558,7 +662,15 @@
                   item.type == 'MACD' && macd && filterColumn('15 Min')
                 "
               >
-                <span :class="getColor(getState(item?.signals, `15min`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `15min`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `15min`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -576,7 +688,15 @@
                 class="text-row"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('15 Min')"
               >
-                <span :class="getColor(getState(item?.signals, `15min`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `15min`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `15min`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -596,7 +716,15 @@
                 class="text-row"
                 v-if="item.type == 'TREND' && trend && filterColumn('5 Min')"
               >
-                <span :class="getColor(getState(item?.signals, `5min`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `5min`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `5min`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -614,7 +742,15 @@
                 class="text-row"
                 v-else-if="item.type == 'MACD' && macd && filterColumn('5 Min')"
               >
-                <span :class="getColor(getState(item?.signals, `5min`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `5min`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `5min`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -632,7 +768,15 @@
                 class="text-row"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('5 Min')"
               >
-                <span :class="getColor(getState(item?.signals, `5min`))">
+                <span
+                  :class="[
+                    getState(item?.signals, `5min`) == 'BULLISH'
+                      ? 'bullish-changed'
+                      : getState(item?.signals, `5min`) == 'BEARISH'
+                      ? 'bearish-changed'
+                      : 'neutral-changed',
+                  ]"
+                >
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
                       <span v-bind="attrs" v-on="on">
@@ -870,5 +1014,50 @@ td {
 }
 .color-default {
   color: #ffffff;
+}
+
+@keyframes bullish-change {
+  from {
+    background-color: #4caf50;
+    color: #ffffff;
+  }
+  to {
+    background-color: transparent;
+    color: #4caf50;
+  }
+}
+
+.bullish-changed {
+  animation: bullish-change 2s forwards;
+}
+
+@keyframes neutral-change {
+  from {
+    background-color: #ff9800;
+    color: #ffffff;
+  }
+  to {
+    background-color: transparent;
+    color: #ff9800;
+  }
+}
+
+.neutral-changed {
+  animation: neutral-change 2s forwards;
+}
+
+@keyframes bearish-change {
+  from {
+    background-color: #f44336;
+    color: #ffffff;
+  }
+  to {
+    background-color: transparent;
+    color: #f44336;
+  }
+}
+
+.bearish-changed {
+  animation: bearish-change 2s forwards;
 }
 </style>
