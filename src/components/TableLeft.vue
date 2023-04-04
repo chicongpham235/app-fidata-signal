@@ -195,9 +195,9 @@
                     <div
                       v-bind="attrs"
                       v-on="on"
-                      @click="showPopup(item.coin_symbol)"
                       class="d-flex align-center justify-evenly coin-name"
                     >
+                      <!-- @click="showPopup(item.coin_symbol)" -->
                       <v-btn
                         small
                         width="40"
