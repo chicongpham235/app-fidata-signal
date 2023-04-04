@@ -25,14 +25,7 @@ import TableLeft from "./TableLeft.vue";
 import TableRight from "./TableRight.vue";
 import axios from "axios";
 import { getRandom } from "./helper";
-
-// function getDifference(array1, array2) {
-//   return array1.filter(object1 => {
-//     return !array2.some(object2 => {
-//       return object1.id === object2.id;
-//     });
-//   });
-// }
+import { shuffle } from "lodash";
 
 export default {
   components: {
@@ -92,6 +85,7 @@ export default {
           };
         });
         this.itemsTableRight = [...this.itemsTableRightBefore];
+        this.itemsTableRight = shuffle(this.itemsTableRight);
         this.itemsTableRight = [
           ...new Map(this.itemsTableRight.map((x) => [x["rank"], x])).values(),
         ].sort((a, b) =>
