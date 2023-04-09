@@ -149,7 +149,7 @@ export default {
               );
             });
             diff.forEach((item) => {
-              this.itemsTableRight.push({
+              this.itemsTableRight.unshift({
                 ...item,
                 ...this.itemsTableRightAfter[index],
               });

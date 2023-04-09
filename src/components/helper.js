@@ -9,7 +9,7 @@ function getTimeTableRight(dateTimeString) {
   // const dateObj = new Date(dateTimeString);
   // const timeString = dateObj.toLocaleTimeString("en-US", { hour12: true });
   // return timeString;
-  return moment(new Date(dateTimeString)).utc().format("hh:mm A");
+  return moment(new Date(dateTimeString)).local().format("hh:mm A");
 }
 
 function getState(data, condition) {
@@ -45,7 +45,7 @@ function getColorToScore(data) {
 }
 function getTimeStampToolip(data) {
   const formattedDate = `${moment(new Date(data))
-    .utc()
+    .local()
     .format("MM/DD/YYYY hh:mm A")} GMT+0`;
   return formattedDate;
 }

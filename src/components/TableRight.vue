@@ -56,13 +56,27 @@
         </template>
         <template v-slot:body="{ items }">
           <tbody>
-            <tr v-for="(item, index) in items" :key="index">
+            <tr
+              v-for="(item, index) in items"
+              :key="index"
+              :class="[getStatus(item) ? 'item-changed' : '']"
+            >
               <td class="text-row">{{ item.coin_symbol }}</td>
               <td class="text-row">
                 <span :class="getColor(getState(item.state))">
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-bind="attrs" v-on="on">
+                      <span
+                        :class="[
+                          getState(item.state) == 'BULLISH'
+                            ? 'bullish-changed'
+                            : getState(item.state) == 'BEARISH'
+                            ? 'bearish-changed'
+                            : 'neutral-changed',
+                        ]"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
                         {{ getState(item.state) }}</span
                       >
                     </template>
@@ -142,6 +156,7 @@ export default {
         value: "updated_at",
       },
     ],
+    oldItems: [],
     getSrc,
     getTimeTableRight,
     getColor,
@@ -150,6 +165,14 @@ export default {
     getColorToScore,
     getTimeStampToolip,
   }),
+  watch: {
+    items: {
+      handler(newVal, oldVal) {
+        if (this.count == 2) this.oldItems = newVal;
+        else this.oldItems = oldVal;
+      },
+    },
+  },
   methods: {
     getState(state) {
       if (!state) {
@@ -159,8 +182,68 @@ export default {
       standard = standard.toUpperCase();
       return standard;
     },
+    getStatus(item) {
+      if (!this.oldItems.includes(item)) return true;
+      return false;
+    },
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@keyframes bullish-change {
+  from {
+    background-color: #4caf50;
+    color: #ffffff;
+  }
+  to {
+    background-color: transparent;
+    color: #4caf50;
+  }
+}
+
+.bullish-changed {
+  animation: bullish-change 2s forwards;
+}
+
+@keyframes neutral-change {
+  from {
+    background-color: #ff9800;
+    color: #ffffff;
+  }
+  to {
+    background-color: transparent;
+    color: #ff9800;
+  }
+}
+
+.neutral-changed {
+  animation: neutral-change 2s forwards;
+}
+
+@keyframes bearish-change {
+  from {
+    background-color: #f44336;
+    color: #ffffff;
+  }
+  to {
+    background-color: transparent;
+    color: #f44336;
+  }
+}
+
+.bearish-changed {
+  animation: bearish-change 2s forwards;
+}
+@keyframes item-changed {
+  from {
+    background-color: #7f9e7f;
+  }
+  to {
+    background-color: transparent;
+  }
+}
+.item-changed {
+  animation: item-changed 2s;
+}
+</style>
