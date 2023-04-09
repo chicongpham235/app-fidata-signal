@@ -55,7 +55,7 @@
           </thead>
         </template>
         <template v-slot:body="{ items }">
-          <tbody>
+          <tbody class="hehe">
             <tr
               v-for="(item, index) in items"
               :key="index"
@@ -130,22 +130,22 @@ export default {
         text: "Symbol",
         value: "coin_symbol",
       },
-      { sortable: false, width: "30px", text: "State" },
+      { sortable: true, width: "19%", text: "State" },
       {
         sortable: false,
-        width: "30px",
+        width: "19%",
         text: "Type",
         value: "type",
       },
       {
-        sortable: false,
-        width: "30px",
+        sortable: true,
+        width: "19%",
         text: "Candle",
         value: "type",
       },
       {
-        sortable: false,
-        width: "30px",
+        sortable: true,
+        width: "19%",
         text: "Price",
         value: "coin_price",
       },
@@ -235,7 +235,7 @@ export default {
 .bearish-changed {
   animation: bearish-change 2s forwards;
 }
-@keyframes item-changed {
+@keyframes item-change {
   from {
     background-color: #7f9e7f;
   }
@@ -244,6 +244,6 @@ export default {
   }
 }
 .item-changed {
-  animation: item-changed 2s;
+  animation: item-change 2s;
 }
 </style>
