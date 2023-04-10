@@ -55,7 +55,7 @@
           </thead>
         </template>
         <template v-slot:body="{ items }">
-          <tbody class="hehe">
+          <tbody>
             <tr
               v-for="(item, index) in items"
               :key="index"
