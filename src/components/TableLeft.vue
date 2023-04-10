@@ -150,24 +150,14 @@
         dark
         dense
         class="elevation-1"
-        sort-by="calories"
-        :items-per-page="30"
         :footer-props="{
           'items-per-page-options': [30],
         }"
         :loading="loadingTable"
-        :page="1"
         :headers="headers"
         :items="items"
         v-if="count > 1 && items.length > 0"
-        :style="[
-          items.length > 15
-            ? {
-                height: 'calc(100vh - 36px - 48px - 37px)',
-                'overflow-y': 'auto',
-              }
-            : {},
-        ]"
+        :id="[items.length > 15 ? 'table' : '']"
       >
         <template slot="progress">
           <v-progress-linear
@@ -857,7 +847,6 @@ export default {
     check_favorite: false,
     items_favorite: [],
     getSrc,
-
     getTimeTableRight,
     getColor,
     getState,
@@ -1015,7 +1004,6 @@ td {
 .color-default {
   color: #ffffff;
 }
-
 @keyframes bullish-change {
   from {
     background-color: #4caf50;
@@ -1026,11 +1014,9 @@ td {
     color: #4caf50;
   }
 }
-
 .bullish-changed {
   animation: bullish-change 2s forwards;
 }
-
 @keyframes neutral-change {
   from {
     background-color: #ff9800;
@@ -1041,11 +1027,9 @@ td {
     color: #ff9800;
   }
 }
-
 .neutral-changed {
   animation: neutral-change 2s forwards;
 }
-
 @keyframes bearish-change {
   from {
     background-color: #f44336;
@@ -1056,8 +1040,11 @@ td {
     color: #f44336;
   }
 }
-
 .bearish-changed {
   animation: bearish-change 2s forwards;
+}
+#table >>> .v-data-table__wrapper {
+  height: calc(100vh - 36px - 48px - 32px - 37px);
+  overflow-y: auto;
 }
 </style>

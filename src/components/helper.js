@@ -46,7 +46,7 @@ function getColorToScore(data) {
 function getTimeStampToolip(data) {
   const formattedDate = `${moment(new Date(data))
     .local()
-    .format("MM/DD/YYYY hh:mm A")} GMT+0`;
+    .format("MM/DD/YYYY hh:mm A")}`;
   return formattedDate;
 }
 function getColor(state) {

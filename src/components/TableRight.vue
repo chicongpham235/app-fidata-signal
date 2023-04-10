@@ -25,17 +25,12 @@
         dense
         :headers="headers"
         :items="items"
-        :items-per-page="23"
         :footer-props="{
           'items-per-page-options': [-1],
         }"
         hide-default-footer
         class="elevation-1"
-        :style="[
-          items.length > 13
-            ? { height: 'calc(100vh - 36px - 37px)', 'overflow-y': 'auto' }
-            : {},
-        ]"
+        :id="[items.length > 18 ? 'table' : '']"
         :loading="loadingTable"
       >
         <template slot="progress">
@@ -139,7 +134,7 @@ export default {
       },
       {
         sortable: true,
-        width: "19%",
+        width: "18%",
         text: "Candle",
         value: "type",
       },
@@ -151,7 +146,7 @@ export default {
       },
       {
         sortable: false,
-        width: "18%",
+        width: "20%",
         text: "Time",
         value: "updated_at",
       },
@@ -201,11 +196,9 @@ export default {
     color: #4caf50;
   }
 }
-
 .bullish-changed {
   animation: bullish-change 2s forwards;
 }
-
 @keyframes neutral-change {
   from {
     background-color: #ff9800;
@@ -216,11 +209,9 @@ export default {
     color: #ff9800;
   }
 }
-
 .neutral-changed {
   animation: neutral-change 2s forwards;
 }
-
 @keyframes bearish-change {
   from {
     background-color: #f44336;
@@ -231,7 +222,6 @@ export default {
     color: #f44336;
   }
 }
-
 .bearish-changed {
   animation: bearish-change 2s forwards;
 }
@@ -245,5 +235,9 @@ export default {
 }
 .item-changed {
   animation: item-change 2s;
+}
+#table >>> .v-data-table__wrapper {
+  height: calc(100vh - 36px - 32px);
+  overflow-y: auto;
 }
 </style>
