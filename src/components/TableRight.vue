@@ -128,7 +128,7 @@ export default {
       { sortable: true, width: "19%", text: "State" },
       {
         sortable: false,
-        width: "19%",
+        width: "16%",
         text: "Type",
         value: "type",
       },
@@ -146,7 +146,7 @@ export default {
       },
       {
         sortable: false,
-        width: "20%",
+        width: "23%",
         text: "Time",
         value: "updated_at",
       },
@@ -163,8 +163,7 @@ export default {
   watch: {
     items: {
       handler(newVal, oldVal) {
-        if (this.count == 2) this.oldItems = newVal;
-        else this.oldItems = oldVal;
+        this.oldItems = oldVal;
       },
     },
   },
@@ -178,7 +177,8 @@ export default {
       return standard;
     },
     getStatus(item) {
-      if (!this.oldItems.includes(item)) return true;
+      const idx = this.oldItems.findIndex((x) => x.id == item.id);
+      if (this.oldItems[idx]?.state != item.state) return true;
       return false;
     },
   },

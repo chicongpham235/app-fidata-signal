@@ -26,7 +26,7 @@
 </template>
 
 <script>
-const TIME_REFRESH = 5 * 60 * 1000;
+const TIME_REFRESH = 30 * 1000;
 // import Popup from "./Popup.vue";
 import TableLeft from "./TableLeft.vue";
 import TableRight from "./TableRight.vue";
@@ -78,13 +78,14 @@ export default {
         this.itemsTableRightBefore = this.items.map((x) => {
           let signals = "{}";
           if (x?.signals) {
-            signals = JSON.parse(x.signals) ?? "{}";
+            signals = JSON.parse(x?.signals) ?? "{}";
             signals = signals.map((x) => {
               return { interval: x.interval, state: x.state };
             });
             signals = JSON.stringify(signals);
           }
           return {
+            id: x.id,
             rank: x.rank,
             type: x.type,
             coin_symbol: x.coin_symbol,
@@ -94,7 +95,7 @@ export default {
           };
         });
         this.itemsTableRightDefault = [...this.itemsTableRightBefore].filter(
-          (x) => isJson(x.signals)
+          (x) => isJson(x?.signals)
         );
         this.itemsTableRightDefault = shuffle(this.itemsTableRightDefault);
         this.itemsTableRightDefault = [
@@ -105,7 +106,7 @@ export default {
           String(b.updated_at).localeCompare(String(a.updated_at))
         );
         this.itemsTableRightDefault = this.itemsTableRightDefault.map((x) => {
-          let signals = JSON.parse(x.signals);
+          let signals = JSON.parse(x?.signals);
           const random = getRandom();
           signals = Object.values(signals);
           const signal = signals.filter(
@@ -120,13 +121,14 @@ export default {
         this.itemsTableRightAfter = this.items.map((x) => {
           let signals = "{}";
           if (x?.signals) {
-            signals = JSON.parse(x.signals) ?? "{}";
+            signals = JSON.parse(x?.signals) ?? "{}";
             signals = signals.map((x) => {
               return { interval: x.interval, state: x.state };
             });
             signals = JSON.stringify(signals);
           }
           return {
+            id: x.id,
             rank: x.rank,
             type: x.type,
             coin_symbol: x.coin_symbol,
@@ -137,12 +139,12 @@ export default {
         });
         for (let index = 0; index < this.itemsTableRightAfter.length; index++) {
           if (
-            this.itemsTableRightAfter[index].signals &&
-            this.itemsTableRightAfter[index].signals !=
-              this.itemsTableRightBefore[index].signals
+            this.itemsTableRightAfter[index]?.signals &&
+            this.itemsTableRightAfter[index]?.signals !=
+              this.itemsTableRightBefore[index]?.signals
           ) {
-            let before = JSON.parse(this.itemsTableRightBefore[index].signals);
-            let after = JSON.parse(this.itemsTableRightAfter[index].signals);
+            let before = JSON.parse(this.itemsTableRightBefore[index]?.signals);
+            let after = JSON.parse(this.itemsTableRightAfter[index]?.signals);
             let diff = after.filter((x) => {
               return before.some(
                 (y) => y.interval == x.interval && y.state != x.state
