@@ -19,7 +19,7 @@
         </p>
       </v-card-title>
 
-      <div style="width: 100%" v-if="count != 1">
+      <div style="width: 100%; position: relative" v-if="count != 1">
         <v-text-field
           label="Search ..."
           append-icon="mdi-magnify"
@@ -36,7 +36,7 @@
         <div style="width: 5%; display: inline-block"></div>
         <div
           style="
-            width: 45%;
+            width: 30%;
             display: inline-block;
             position: absolute;
             margin-top: 4px;
@@ -73,8 +73,17 @@
           >
             <span style="color: rgb(97, 100, 255); font-size: 12px"> RSI </span>
           </v-btn>
-
-          <div style="width: 5%; display: inline-block"></div>
+        </div>
+        <div
+          style="
+            width: 142.5px;
+            display: inline-block;
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+          "
+        >
           <v-btn depressed @click="onFilterColumn()">
             <div class="d-flex">
               <svg
@@ -139,9 +148,6 @@
             </div>
           </v-btn>
         </div>
-        <!-- <div style="width: 15%; display: inline-block">
-
-        </div> -->
       </div>
 
       <v-data-table

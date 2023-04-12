@@ -9,7 +9,7 @@
         bottom
         offset-y
         :max-width="285"
-        v-if="!loadingTable"
+        v-if="count > 1"
         v-model="menu.show"
       >
         <template v-slot:activator="{ on, attrs }">
