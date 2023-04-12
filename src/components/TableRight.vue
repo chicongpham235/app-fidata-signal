@@ -214,7 +214,6 @@
         v-if="count > 1 && items.length > 0"
         dark
         dense
-        :search="search"
         fixed-header
         :headers="headers"
         :items="itemsFilter"
@@ -223,7 +222,7 @@
         }"
         hide-default-footer
         class="elevation-1"
-        :id="[items.length > 18 ? 'table' : '']"
+        :id="[itemsFilter.length > 18 ? 'table' : '']"
         :loading="loadingTable"
       >
         <template slot="progress">
@@ -315,7 +314,8 @@ export default {
       return this.items.filter(
         (x) =>
           this.typeFilter.some((item) => item == x.type) &&
-          this.intervalsFilter.some((item) => item == x.interval)
+          this.intervalsFilter.some((item) => item == x.interval) &&
+          x.coin_symbol.includes(this.search.toUpperCase().trim())
       );
     },
   },
@@ -508,7 +508,7 @@ export default {
   animation: item-change 2s;
 }
 #table >>> .v-data-table__wrapper {
-  height: calc(100vh - 36px - 32px);
+  height: calc(100vh - 36px - 32px - 12px);
   overflow-y: auto;
 }
 .checkbox >>> .v-input__control .v-input__slot .v-label {

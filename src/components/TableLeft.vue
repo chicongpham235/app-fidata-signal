@@ -1051,7 +1051,7 @@ td {
   animation: bearish-change 2s forwards;
 }
 #table >>> .v-data-table__wrapper {
-  height: calc(100vh - 36px - 48px - 32px - 37px);
+  height: calc(100vh - 36px - 48px - 37px - 32px - 12px);
   overflow-y: auto;
 }
 </style>
