@@ -36,7 +36,7 @@
         <div style="width: 5%; display: inline-block"></div>
         <div
           style="
-            width: 30%;
+            width: 25%;
             display: inline-block;
             position: absolute;
             margin-top: 4px;
@@ -76,7 +76,7 @@
         </div>
         <div
           style="
-            width: 142.5px;
+            width: 146.5px;
             display: inline-block;
             position: absolute;
             right: 4px;
@@ -84,7 +84,7 @@
             transform: translateY(-50%);
           "
         >
-          <v-btn depressed @click="onFilterColumn()">
+          <v-btn class="mr-1" depressed @click="onFilterColumn()">
             <div class="d-flex">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
