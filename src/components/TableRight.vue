@@ -3,11 +3,14 @@
     <h2 style="position: relative" class="white--text my-4">
       Alert Strem
       <v-menu
-        :close-on-click="false"
-        :close-on-content-click="menu.close"
+        ref="menu"
+        :close-on-click="true"
+        :close-on-content-click="false"
         bottom
         offset-y
         :max-width="285"
+        v-if="!loadingTable"
+        v-model="menu.show"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -55,6 +58,7 @@
               <v-col cols="12" class="pb-4">
                 <v-text-field
                   label="Symbols"
+                  v-model="search"
                   color="#ffffff"
                   dense
                   dark
@@ -212,9 +216,10 @@
         v-if="count > 1 && items.length > 0"
         dark
         dense
+        :search="search"
         fixed-header
         :headers="headers"
-        :items="items"
+        :items="itemsFilter"
         :footer-props="{
           'items-per-page-options': [-1],
         }"
@@ -307,7 +312,18 @@ export default {
     items: { type: Array, required: true },
     count: { type: Number },
   },
+  computed: {
+    itemsFilter() {
+      return this.items.filter(
+        (x) =>
+          this.typeFilter.some((item) => item == x.type) &&
+          this.intervalsFilter.some((item) => item == x.interval)
+      );
+    },
+  },
   data: () => ({
+    itemsTable: [],
+    search: "",
     headers: [
       {
         sortable: false,
@@ -351,9 +367,12 @@ export default {
       "5min": true,
     },
     type: { trend: true, rsi: true, macd: true },
+    intervalsFilter: ["24h", "4h", "1h", "30min", "15min", "5min"],
+    typeFilter: ["TREND", "RSI", "MACD"],
     menu: {
-      close: false,
+      show: false,
     },
+    bindOnKeyPress: null,
     getSrc,
     getTimeTableRight,
     getColor,
@@ -368,6 +387,47 @@ export default {
         this.oldItems = oldVal;
       },
     },
+    type: {
+      handler(val) {
+        const temp = ["trend", "rsi", "macd"];
+        temp.forEach((item) => {
+          if (val[item]) {
+            if (!this.typeFilter.includes(item.toUpperCase())) {
+              this.typeFilter.push(item.toUpperCase());
+            }
+          } else {
+            const idx = this.typeFilter.indexOf(item.toUpperCase());
+            if (idx > -1) this.typeFilter.splice(idx, 1);
+          }
+        });
+      },
+      deep: true,
+    },
+    intervals: {
+      handler(val) {
+        const temp = ["24h", "4h", "1h", "30min", "15min", "5min"];
+        temp.forEach((item) => {
+          if (val[item]) {
+            if (!this.intervalsFilter.includes(item)) {
+              this.intervalsFilter.push(item);
+            }
+          } else {
+            const idx = this.intervalsFilter.indexOf(item);
+            if (idx > -1) this.intervalsFilter.splice(idx, 1);
+          }
+        });
+      },
+      deep: true,
+    },
+  },
+  created() {
+    this.bindOnKeyPress = this.onKeyPress.bind(this);
+  },
+  mounted() {
+    window.addEventListener("keydown", this.bindOnKeyPress);
+  },
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.bindOnKeyPress);
   },
   methods: {
     getState(state) {
@@ -384,10 +444,15 @@ export default {
       return false;
     },
     onCloseMenu() {
-      this.menu.close = true;
+      this.menu.show = false;
     },
     onOpenMenu() {
-      this.menu.close = false;
+      this.menu.show = true;
+    },
+    onKeyPress(e) {
+      if (e.key == "Escape" || e.code == "Escape") {
+        this.onCloseMenu();
+      }
     },
   },
 };
