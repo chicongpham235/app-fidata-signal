@@ -149,6 +149,7 @@
         :custom-filter="customSearch"
         dark
         dense
+        fixed-header
         class="elevation-1"
         :footer-props="{
           'items-per-page-options': [30],
