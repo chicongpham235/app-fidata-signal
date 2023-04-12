@@ -4,10 +4,10 @@
       Alert Strem
       <v-menu
         :close-on-click="false"
-        :close-on-content-click="false"
+        :close-on-content-click="menu.close"
         bottom
         offset-y
-        :max-width="250"
+        :max-width="285"
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -21,6 +21,7 @@
             "
             class="rounded-lg"
             color="transparent"
+            @click="onOpenMenu"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -40,7 +41,12 @@
           <v-list-item>
             <v-row>
               <v-col cols="12" class="pt-4 pb-2">
-                <div class="text-caption">Settings</div>
+                <div class="text-caption">
+                  Settings
+                  <v-btn x-small icon class="float-right" @click="onCloseMenu">
+                    <v-icon>mdi-close</v-icon>
+                  </v-btn>
+                </div>
                 <div class="text-caption grey--text">
                   Customize Alert Stream
                 </div>
@@ -345,6 +351,9 @@ export default {
       "5min": true,
     },
     type: { trend: true, rsi: true, macd: true },
+    menu: {
+      close: false,
+    },
     getSrc,
     getTimeTableRight,
     getColor,
@@ -373,6 +382,12 @@ export default {
       const idx = this.oldItems.findIndex((x) => x.id == item.id);
       if (this.oldItems[idx]?.state != item.state) return true;
       return false;
+    },
+    onCloseMenu() {
+      this.menu.close = true;
+    },
+    onOpenMenu() {
+      this.menu.close = false;
     },
   },
 };
