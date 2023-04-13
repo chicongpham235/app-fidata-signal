@@ -337,10 +337,25 @@ export default {
         value: "type",
       },
       {
-        sortable: true,
+        // sortable: true,
         width: "18%",
         text: "Candle",
-        value: "type",
+        value: "interval",
+        sort: (a, b) => {
+          let x = 0;
+          let y = 0;
+          if (a.includes("h")) {
+            x = parseInt(a) * 60 * 60 * 1000;
+          } else {
+            x = parseInt(a) * 60 * 1000;
+          }
+          if (b.includes("h")) {
+            y = parseInt(b) * 60 * 60 * 1000;
+          } else {
+            y = parseInt(b) * 60 * 1000;
+          }
+          return x - y;
+        },
       },
       {
         sortable: true,
