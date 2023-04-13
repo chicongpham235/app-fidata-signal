@@ -329,7 +329,18 @@ export default {
         text: "Symbol",
         value: "coin_symbol",
       },
-      { sortable: true, width: "19%", text: "State" },
+      {
+        width: "19%",
+        text: "State",
+        value: "state",
+        sort: (a, b) => {
+          if (a == "bullish") return 1;
+          if (a == "neutral" && b == "bullish") return -1;
+          if (a == "neutral" && (b == "neutral" || b == "bearish")) return 1;
+          if (a == "bearish") return -1;
+          return 0;
+        },
+      },
       {
         sortable: false,
         width: "16%",
@@ -337,7 +348,6 @@ export default {
         value: "type",
       },
       {
-        // sortable: true,
         width: "18%",
         text: "Candle",
         value: "interval",
