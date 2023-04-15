@@ -19,8 +19,11 @@
         </p>
       </v-card-title>
 
-      <div style="width: 100%; position: relative" v-if="count != 1">
-        <v-text-field
+      <div
+        style="width: 100%; height: 48px; position: relative"
+        v-if="count != 1"
+      >
+        <!-- <v-text-field
           label="Search ..."
           append-icon="mdi-magnify"
           hide-details
@@ -32,8 +35,18 @@
           "
           v-model="search"
           color="#ffffff"
-        ></v-text-field>
-        <div style="width: 5%; display: inline-block"></div>
+        ></v-text-field> -->
+        <div style="width: 40%; display: inline-block; margin-top: 4px">
+          <v-btn tile style="height: 44px; width: 100px" class="mr-1">
+            <v-icon size="large" color="success">mdi-arrow-up</v-icon>
+            <span style="color: #4caf50; font-size: 12px"> BULLISH </span>
+          </v-btn>
+          <v-btn tile style="height: 44px; width: 100px" class="mr-1">
+            <v-icon size="large" color="error">mdi-arrow-down</v-icon>
+            <span style="color: #ff5252; font-size: 12px"> BEARISH </span>
+          </v-btn>
+        </div>
+        <div style="width: 10%; display: inline-block"></div>
         <div
           style="
             width: 25%;
@@ -76,7 +89,7 @@
         </div>
         <div
           style="
-            width: 146.5px;
+            width: 186.5px;
             display: inline-block;
             position: absolute;
             right: 4px;
@@ -84,6 +97,40 @@
             transform: translateY(-50%);
           "
         >
+          <v-menu
+            ref="menu"
+            :close-on-click="true"
+            :close-on-content-click="false"
+            right
+            offset-y
+            :max-width="285"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <div
+                style="display: inline-block"
+                class="mr-4"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon>mdi-magnify</v-icon>
+              </div>
+            </template>
+
+            <v-list>
+              <v-list-item>
+                <v-text-field
+                  label="Search"
+                  append-icon="mdi-magnify"
+                  hide-details
+                  style="width: 200px; display: inline-block !important"
+                  v-model="search"
+                  color="#ffffff"
+                  autofocus
+                ></v-text-field>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+
           <v-btn class="mr-1" depressed @click="onFilterColumn()">
             <div class="d-flex">
               <svg
@@ -186,7 +233,12 @@
         <template v-slot:body="{ items }">
           <tbody>
             <tr v-for="(item, index) in items" :key="index">
-              <td class="text-row" v-if="index % 3 === 0" rowspan="3">
+              <td
+                class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
+                v-if="index % 3 === 0"
+                rowspan="3"
+              >
                 <v-tooltip top>
                   <template v-slot:activator="{ on, attrs }">
                     <div
@@ -194,7 +246,6 @@
                       v-on="on"
                       class="d-flex align-center justify-evenly coin-name"
                     >
-                      <!-- @click="showPopup(item.coin_symbol)" -->
                       <v-btn
                         small
                         width="40"
@@ -295,18 +346,31 @@
                   </span>
                 </v-tooltip>
               </td>
-              <td class="text-row" v-if="item.type == 'TREND' && trend">
-                {{ item.type }}
-              </td>
-              <td class="text-row" v-else-if="item.type == 'MACD' && macd">
-                {{ item.type }}
-              </td>
-              <td class="text-row" v-else-if="item.type == 'RSI' && rsi">
-                {{ item.type }}
-              </td>
-              <!-- <td class="text-row" v-else></td> -->
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
+                v-if="item.type == 'TREND' && trend"
+              >
+                {{ item.type }}
+              </td>
+              <td
+                class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
+                v-else-if="item.type == 'MACD' && macd"
+              >
+                {{ item.type }}
+              </td>
+              <td
+                class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
+                rowspan="1"
+                v-else-if="item.type == 'RSI' && rsi"
+              >
+                {{ item.type }}
+              </td>
+              <td
+                class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-if="item.type == 'TREND' && trend && filterColumn('24H')"
               >
                 <span
@@ -333,6 +397,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'MACD' && macd && filterColumn('24H')"
               >
                 <span
@@ -359,6 +424,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('24H')"
               >
                 <span
@@ -383,10 +449,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <!-- <td v-else></td> -->
 
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-if="item.type == 'TREND' && trend && filterColumn('4H')"
               >
                 <span
@@ -413,6 +479,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'MACD' && macd && filterColumn('4H')"
               >
                 <span
@@ -439,6 +506,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('4H')"
               >
                 <span
@@ -463,10 +531,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <!-- <td v-else></td> -->
 
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-if="item.type == 'TREND' && trend && filterColumn('1H')"
               >
                 <span
@@ -493,6 +561,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'MACD' && macd && filterColumn('1H')"
               >
                 <span
@@ -519,6 +588,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('1H')"
               >
                 <span
@@ -543,10 +613,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <!-- <td class="text-row" v-else></td> -->
 
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-if="item.type == 'TREND' && trend && filterColumn('30 Min')"
               >
                 <span
@@ -573,6 +643,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="
                   item.type == 'MACD' && macd && filterColumn('30 Min')
                 "
@@ -601,6 +672,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('30 Min')"
               >
                 <span
@@ -625,10 +697,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <!-- <td v-else></td> -->
 
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-if="item.type == 'TREND' && trend && filterColumn('15 Min')"
               >
                 <span
@@ -655,6 +727,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="
                   item.type == 'MACD' && macd && filterColumn('15 Min')
                 "
@@ -683,6 +756,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('15 Min')"
               >
                 <span
@@ -707,10 +781,10 @@
                   </v-tooltip>
                 </span>
               </td>
-              <!-- <td v-else></td> -->
 
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-if="item.type == 'TREND' && trend && filterColumn('5 Min')"
               >
                 <span
@@ -737,6 +811,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'MACD' && macd && filterColumn('5 Min')"
               >
                 <span
@@ -763,6 +838,7 @@
               </td>
               <td
                 class="text-row"
+                style="border-bottom: thin solid hsla(0, 0%, 100%, 0.12)"
                 v-else-if="item.type == 'RSI' && rsi && filterColumn('5 Min')"
               >
                 <span
@@ -787,7 +863,6 @@
                   </v-tooltip>
                 </span>
               </td>
-              <!-- <td v-else></td> -->
             </tr>
           </tbody>
         </template>
