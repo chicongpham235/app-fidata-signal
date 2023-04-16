@@ -330,7 +330,7 @@ export default {
         value: "coin_symbol",
       },
       {
-        width: "19%",
+        width: "16%",
         text: "State",
         value: "state",
         sort: (a, b) => {
@@ -348,7 +348,7 @@ export default {
         value: "type",
       },
       {
-        width: "18%",
+        width: "21%",
         text: "Candle",
         value: "interval",
         sort: (a, b) => {

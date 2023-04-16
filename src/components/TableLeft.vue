@@ -24,13 +24,71 @@
         v-if="count != 1"
       >
         <div style="width: 50%; display: inline-block; margin-top: 4px">
-          <v-btn tile style="height: 44px; width: 100px" class="mr-1">
+          <v-btn
+            v-if="
+              ['TREND', 'RSI', 'MACD'].some((x) => x == sort_type_item.value)
+            "
+            tile
+            style="height: 44px; width: 100px"
+            class="mr-1"
+            :class="[state_item == 'bullish' ? 'btn-default' : '']"
+            @click="
+              if (state_item != 'bullish') {
+                state_item = 'bullish';
+              } else {
+                state_item = null;
+              }
+            "
+          >
             <v-icon size="large" color="success">mdi-arrow-up</v-icon>
             <span style="color: #4caf50; font-size: 12px"> BULLISH </span>
           </v-btn>
-          <v-btn tile style="height: 44px; width: 100px" class="mr-1">
+          <v-btn
+            v-else
+            disabled
+            tile
+            style="height: 44px; width: 100px"
+            class="mr-1"
+          >
+            <v-icon size="large" color="success">mdi-arrow-up</v-icon>
+            <span
+              style="color: hsla(0, 0%, 100%, 0.3) !important; font-size: 12px"
+            >
+              BULLISH
+            </span>
+          </v-btn>
+          <v-btn
+            v-if="
+              ['TREND', 'RSI', 'MACD'].some((x) => x == sort_type_item.value)
+            "
+            tile
+            style="height: 44px; width: 100px"
+            class="mr-1"
+            :class="[state_item == 'bearish' ? 'btn-default' : '']"
+            @click="
+              if (state_item != 'bearish') {
+                state_item = 'bearish';
+              } else {
+                state_item = null;
+              }
+            "
+          >
             <v-icon size="large" color="error">mdi-arrow-down</v-icon>
             <span style="color: #ff5252; font-size: 12px"> BEARISH </span>
+          </v-btn>
+          <v-btn
+            v-else
+            disabled
+            tile
+            style="height: 44px; width: 100px"
+            class="mr-1"
+          >
+            <v-icon size="large" color="error">mdi-arrow-down</v-icon>
+            <span
+              style="color: hsla(0, 0%, 100%, 0.3) !important; font-size: 12px"
+            >
+              BEARISH
+            </span>
           </v-btn>
 
           <v-menu
@@ -47,7 +105,7 @@
                 v-bind="attrs"
                 v-on="on"
                 size="small"
-                class="pa-0 mr-1"
+                class="pa-0 mr-1 text-capitalize"
               >
                 <span class="text-caption grey--text">Sort by: </span>
                 <span
@@ -88,7 +146,24 @@
                 v-bind="attrs"
                 v-on="on"
                 size="small"
-                class="pa-0"
+                class="pa-0 text-capitalize"
+                v-if="
+                  ['TREND', 'RSI', 'MACD'].some(
+                    (x) => x == sort_type_item.value
+                  )
+                "
+              >
+                <span class="text-caption">{{ sort_interval_item.text }}</span>
+              </v-btn>
+              <v-btn
+                tile
+                style="display: inline-block; width: 50px; height: 44px"
+                v-bind="attrs"
+                v-on="on"
+                size="small"
+                class="pa-0 text-capitalize"
+                v-else
+                disabled
               >
                 <span class="text-caption">{{ sort_interval_item.text }}</span>
               </v-btn>
@@ -124,7 +199,7 @@
             tile
             style="height: 44px; width: 64px"
             class="mr-1"
-            :class="[trend == true ? 'btn-selected' : 'btn-default']"
+            :class="[trend == true ? 'btn-selected' : '']"
             @click="onFilterTREND"
           >
             <span style="color: rgb(97, 100, 255); font-size: 12px">
@@ -135,7 +210,7 @@
             tile
             style="height: 44px; width: 64px"
             class="mr-1"
-            :class="[macd == true ? 'btn-selected' : 'btn-default']"
+            :class="[macd == true ? 'btn-selected' : '']"
             @click="onFilterMACD"
           >
             <span style="color: rgb(97, 100, 255); font-size: 12px">
@@ -146,7 +221,7 @@
             tile
             style="height: 44px; width: 64px"
             class="mr-1"
-            :class="[rsi == true ? 'btn-selected' : 'btn-default']"
+            :class="[rsi == true ? 'btn-selected' : '']"
             @click="onFilterRSI"
           >
             <span style="color: rgb(97, 100, 255); font-size: 12px"> RSI </span>
@@ -268,7 +343,7 @@
         }"
         :loading="loadingTable"
         :headers="headers"
-        :items="items"
+        :items="itemsSort"
         v-if="count > 1 && items.length > 0"
         :id="[items.length > 15 ? 'table' : '']"
       >
@@ -964,13 +1039,14 @@ export default {
     count: { type: Number },
   },
   data: () => ({
+    state_item: null,
     sort_type_item: { text: "Rank", value: "rank" },
     sort_type_items: [
       { text: "Rank", value: "rank" },
-      { text: "Technical Score", value: "technical_sore" },
-      { text: "TREND", value: "trend" },
-      { text: "RSI", value: "rsi" },
-      { text: "MACD", value: "macd" },
+      { text: "Technical Score", value: "technical_score" },
+      { text: "TREND", value: "TREND" },
+      { text: "RSI", value: "RSI" },
+      { text: "MACD", value: "MACD" },
     ],
     sort_interval_item: { text: "5Min", value: "5min" },
     sort_interval_items: [
@@ -1079,7 +1155,102 @@ export default {
       },
     },
   },
-  computed: {},
+  computed: {
+    itemsSort() {
+      let temp = [...this.items];
+      if (
+        ["TREND", "RSI", "MACD"].some((x) => x == this.sort_type_item.value)
+      ) {
+        temp = temp.sort((a, b) => {
+          if (
+            a?.signals &&
+            a?.signals.includes(
+              `"interval":"${this.sort_interval_item.value}","state":"${this.state_item}"`
+            )
+          ) {
+            return -1;
+          }
+          if (
+            a?.signals &&
+            !a?.signals.includes(
+              `"interval":"${this.sort_interval_item.value}","state":"${this.state_item}"`
+            ) &&
+            b?.signals &&
+            b?.signals.includes(
+              `"interval":"${this.sort_interval_item.value}","state":"${this.state_item}"`
+            )
+          ) {
+            return 1;
+          }
+          return 0;
+        });
+      } else {
+        temp = temp.sort((a, b) => {
+          switch (this.sort_type_item.value) {
+            case "technical_score":
+              if (a.technical_score > b.technical_score) return -1;
+              if (a.technical_score < b.technical_score) return 1;
+              return 0;
+            case "rank":
+              return;
+          }
+        });
+      }
+      temp = temp.reduce(function (accumulator, currentValue) {
+        if (!accumulator[`${currentValue.symbol_name}_TREND`]) {
+          accumulator[`${currentValue.symbol_name}_TREND`] = {
+            id: currentValue.id,
+            rank: currentValue.rank,
+            coin_price: currentValue.coin_price,
+            coin_symbol: currentValue.coin_symbol,
+            symbol_name: currentValue.symbol_name,
+            type: "TREND",
+            created_at: new Date(Date.UTC(null)),
+            updated_at: new Date(Date.UTC(null)),
+          };
+        }
+        if (!accumulator[`${currentValue.symbol_name}_MACD`]) {
+          accumulator[`${currentValue.symbol_name}_MACD`] = {
+            id: currentValue.id,
+            rank: currentValue.rank,
+            coin_price: currentValue.coin_price,
+            coin_symbol: currentValue.coin_symbol,
+            symbol_name: currentValue.symbol_name,
+            type: "MACD",
+            created_at: new Date(Date.UTC(null)),
+            updated_at: new Date(Date.UTC(null)),
+          };
+        }
+        if (!accumulator[`${currentValue.symbol_name}_RSI`]) {
+          accumulator[`${currentValue.symbol_name}_RSI`] = {
+            id: currentValue.id,
+            rank: currentValue.rank,
+            coin_price: currentValue.coin_price,
+            coin_symbol: currentValue.coin_symbol,
+            symbol_name: currentValue.symbol_name,
+            type: "RSI",
+            created_at: new Date(Date.UTC(null)),
+            updated_at: new Date(Date.UTC(null)),
+          };
+        }
+        if (accumulator[`${currentValue.symbol_name}_${currentValue.type}`]) {
+          accumulator[`${currentValue.symbol_name}_${currentValue.type}`] =
+            new Date(
+              accumulator[
+                `${currentValue.symbol_name}_${currentValue.type}`
+              ].updated_at
+            ) < new Date(currentValue.updated_at)
+              ? currentValue
+              : accumulator[`${currentValue.symbol_name}_${currentValue.type}`];
+        }
+        return accumulator;
+      }, {});
+      temp = Object.keys(temp).map(function (key) {
+        return temp[key];
+      });
+      return temp;
+    },
+  },
   methods: {
     filterColumn(text) {
       if (this.headers.find((x) => x.text == text)) return true;
@@ -1222,5 +1393,11 @@ td {
 #table >>> .v-data-table__wrapper {
   height: calc(100vh - 36px - 48px - 37px - 32px - 12px);
   overflow-y: auto;
+}
+.active-btn {
+  background-color: grey;
+}
+.disabled-btn {
+  background-color: transparent;
 }
 </style>
