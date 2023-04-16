@@ -33,40 +33,83 @@
             <span style="color: #ff5252; font-size: 12px"> BEARISH </span>
           </v-btn>
 
-          <v-select
-            label="Sort by"
-            :items="sort_type_items"
-            v-model="sort_type_item"
-            style="
-              display: inline-block;
-              width: 100px;
+          <v-menu
+            close-on-click
+            close-on-content-click
+            right
+            offset-y
+            :max-width="285"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                tile
+                style="display: inline-block; width: 100px; height: 44px"
+                v-bind="attrs"
+                v-on="on"
+                size="small"
+                class="pa-0 mr-1"
+              >
+                <span class="text-caption grey--text">Sort by: </span>
+                <span
+                  class="text-caption overflow-hidden text-no-wrap text-truncate"
+                  >{{ sort_type_item?.text }}</span
+                >
+              </v-btn>
+            </template>
 
-              padding: 0;
-              font-size: 14px;
-            "
-            color="#6164ff"
-            item-color="default"
-            class="select"
-            item-text="text"
-            item-value="value"
-            dense
+            <v-list>
+              <v-list-item-group v-model="sort_type_item" mandatory>
+                <v-list-item
+                  v-for="(item, index) in sort_type_items"
+                  :key="index"
+                  :value="item"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title class="text-caption">{{
+                      item.text
+                    }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-menu>
+
+          <v-menu
+            :close-on-click="true"
+            :close-on-content-click="true"
+            right
+            offset-y
+            :max-width="100"
           >
-          </v-select>
-          <v-select
-            :items="sort_interval_items"
-            v-model="sort_interval_item"
-            style="
-              display: inline-block;
-              width: 75px;
-              padding: 0;
-              font-size: 14px;
-            "
-            color="#6164ff"
-            item-color="default"
-            class="select"
-            dense
-          >
-          </v-select>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                tile
+                style="display: inline-block; width: 50px; height: 44px"
+                v-bind="attrs"
+                v-on="on"
+                size="small"
+                class="pa-0"
+              >
+                <span class="text-caption">{{ sort_interval_item.text }}</span>
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item-group v-model="sort_interval_item" mandatory>
+                <v-list-item
+                  v-for="(item, index) in sort_interval_items"
+                  :key="index"
+                  :value="item"
+                >
+                  <v-list-item-content>
+                    <v-list-item-title class="text-caption">{{
+                      item.text
+                    }}</v-list-item-title>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
+          </v-menu>
         </div>
         <div style="width: 3%; display: inline-block"></div>
         <div
@@ -120,7 +163,6 @@
           "
         >
           <v-menu
-            ref="menu"
             :close-on-click="true"
             :close-on-content-click="false"
             right
@@ -922,7 +964,7 @@ export default {
     count: { type: Number },
   },
   data: () => ({
-    sort_type_item: "rank",
+    sort_type_item: { text: "Rank", value: "rank" },
     sort_type_items: [
       { text: "Rank", value: "rank" },
       { text: "Technical Score", value: "technical_sore" },
@@ -930,11 +972,36 @@ export default {
       { text: "RSI", value: "rsi" },
       { text: "MACD", value: "macd" },
     ],
-    sort_interval_item: "5min",
-    sort_interval_items: ["24h", "4h", "1h", "30min", "15min", "5min"],
+    sort_interval_item: { text: "5Min", value: "5min" },
+    sort_interval_items: [
+      {
+        text: "24H",
+        value: "24h",
+      },
+      {
+        text: "4H",
+        value: "4h",
+      },
+      {
+        text: "1H",
+        value: "1h",
+      },
+      {
+        text: "30Min",
+        value: "30min",
+      },
+      {
+        text: "15Min",
+        value: "15min",
+      },
+      {
+        text: "5Min",
+        value: "5min",
+      },
+    ],
     search: "",
     oldHeaders: [
-      { sortable: true, text: "", value: "symbol_name", width: "16%" },
+      { sortable: false, text: "", value: "symbol_name", width: "16%" },
       { sortable: false, text: "", value: "type" },
       { sortable: false, text: "24H", align: "center" },
       { sortable: false, text: "4H", align: "center" },
@@ -944,7 +1011,7 @@ export default {
       { sortable: false, text: "5 Min", align: "center" },
     ],
     headers: [
-      { sortable: true, text: "", value: "symbol_name", width: "16%" },
+      { sortable: false, text: "", value: "symbol_name", width: "16%" },
       { sortable: false, text: "", value: "type" },
       { sortable: false, text: "24H", align: "center" },
       { sortable: false, text: "4H", align: "center" },
@@ -1155,8 +1222,5 @@ td {
 #table >>> .v-data-table__wrapper {
   height: calc(100vh - 36px - 48px - 37px - 32px - 12px);
   overflow-y: auto;
-}
-.select >>> .v-input__control .v-input__slot .v-label {
-  font-size: 12px;
 }
 </style>
