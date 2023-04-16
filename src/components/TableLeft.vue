@@ -23,20 +23,7 @@
         style="width: 100%; height: 48px; position: relative"
         v-if="count != 1"
       >
-        <!-- <v-text-field
-          label="Search ..."
-          append-icon="mdi-magnify"
-          hide-details
-          class="rounded-lg"
-          style="
-            background-color: #514c4c;
-            width: 50%;
-            display: inline-block !important;
-          "
-          v-model="search"
-          color="#ffffff"
-        ></v-text-field> -->
-        <div style="width: 40%; display: inline-block; margin-top: 4px">
+        <div style="width: 50%; display: inline-block; margin-top: 4px">
           <v-btn tile style="height: 44px; width: 100px" class="mr-1">
             <v-icon size="large" color="success">mdi-arrow-up</v-icon>
             <span style="color: #4caf50; font-size: 12px"> BULLISH </span>
@@ -45,11 +32,46 @@
             <v-icon size="large" color="error">mdi-arrow-down</v-icon>
             <span style="color: #ff5252; font-size: 12px"> BEARISH </span>
           </v-btn>
+
+          <v-select
+            label="Sort by"
+            :items="sort_type_items"
+            v-model="sort_type_item"
+            style="
+              display: inline-block;
+              width: 100px;
+
+              padding: 0;
+              font-size: 14px;
+            "
+            color="#6164ff"
+            item-color="default"
+            class="select"
+            item-text="text"
+            item-value="value"
+            dense
+          >
+          </v-select>
+          <v-select
+            :items="sort_interval_items"
+            v-model="sort_interval_item"
+            style="
+              display: inline-block;
+              width: 75px;
+              padding: 0;
+              font-size: 14px;
+            "
+            color="#6164ff"
+            item-color="default"
+            class="select"
+            dense
+          >
+          </v-select>
         </div>
-        <div style="width: 10%; display: inline-block"></div>
+        <div style="width: 3%; display: inline-block"></div>
         <div
           style="
-            width: 25%;
+            width: 30%;
             display: inline-block;
             position: absolute;
             margin-top: 4px;
@@ -89,7 +111,7 @@
         </div>
         <div
           style="
-            width: 186.5px;
+            width: 170.5px;
             display: inline-block;
             position: absolute;
             right: 4px;
@@ -106,12 +128,7 @@
             :max-width="285"
           >
             <template v-slot:activator="{ on, attrs }">
-              <div
-                style="display: inline-block"
-                class="mr-4"
-                v-bind="attrs"
-                v-on="on"
-              >
+              <div style="display: inline-block" v-bind="attrs" v-on="on">
                 <v-icon>mdi-magnify</v-icon>
               </div>
             </template>
@@ -905,6 +922,16 @@ export default {
     count: { type: Number },
   },
   data: () => ({
+    sort_type_item: "rank",
+    sort_type_items: [
+      { text: "Rank", value: "rank" },
+      { text: "Technical Score", value: "technical_sore" },
+      { text: "TREND", value: "trend" },
+      { text: "RSI", value: "rsi" },
+      { text: "MACD", value: "macd" },
+    ],
+    sort_interval_item: "5min",
+    sort_interval_items: ["24h", "4h", "1h", "30min", "15min", "5min"],
     search: "",
     oldHeaders: [
       { sortable: true, text: "", value: "symbol_name", width: "16%" },
@@ -1128,5 +1155,8 @@ td {
 #table >>> .v-data-table__wrapper {
   height: calc(100vh - 36px - 48px - 37px - 32px - 12px);
   overflow-y: auto;
+}
+.select >>> .v-input__control .v-input__slot .v-label {
+  font-size: 12px;
 }
 </style>
