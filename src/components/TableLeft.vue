@@ -332,8 +332,6 @@
       </div>
 
       <v-data-table
-        :search="search"
-        :custom-filter="customSearch"
         dark
         dense
         fixed-header
@@ -345,7 +343,7 @@
         :headers="headers"
         :items="itemsSort"
         v-if="count > 1 && items.length > 0"
-        :id="[items.length > 15 ? 'table' : '']"
+        :id="[itemsSort.length > 15 ? 'table' : '']"
       >
         <template slot="progress">
           <v-progress-linear
@@ -1248,7 +1246,19 @@ export default {
       temp = Object.keys(temp).map(function (key) {
         return temp[key];
       });
-      return temp;
+      return temp.filter((item) => {
+        return (
+          item &&
+          (item.symbol_name
+            .toString()
+            .toLowerCase()
+            .includes(this.search.toLowerCase().trim()) ||
+            item.coin_symbol
+              .toString()
+              .toLowerCase()
+              .includes(this.search.toLowerCase().trim()))
+        );
+      });
     },
   },
   methods: {
@@ -1273,19 +1283,6 @@ export default {
     },
     onFilterMACD() {
       this.macd = !this.macd;
-    },
-    customSearch(value, search, item) {
-      return (
-        item &&
-        (item.symbol_name
-          .toString()
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-          item.coin_symbol
-            .toString()
-            .toLowerCase()
-            .includes(search.toLowerCase()))
-      );
     },
     onFilterColumn() {
       this.$refs.columnDialog.open();
