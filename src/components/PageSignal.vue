@@ -114,9 +114,14 @@ export default {
           )[0];
           return { ...x, interval: signal?.interval, state: signal?.state };
         });
+        let btc = this.itemsTableRightDefault.filter(
+          (x) => x.coin_symbol == "BTC"
+        )[0];
         this.itemsTableRightDefault = this.itemsTableRightDefault
           .filter((x) => x.interval && x.state)
-          .slice(0, 30);
+          .slice(0, 29);
+        this.itemsTableRightDefault = [...this.itemsTableRightDefault, btc];
+        console.log(this.itemsTableRightDefault);
       } else {
         this.itemsTableRightAfter = this.items.map((x) => {
           let signals = "{}";

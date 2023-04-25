@@ -1,7 +1,7 @@
 <template>
   <v-col cols="12" sm="5">
     <h2 style="position: relative" class="white--text my-4">
-      Alert Strem
+      Alert Stream
       <v-menu
         ref="menu"
         :close-on-click="true"
@@ -538,5 +538,9 @@ export default {
 }
 .checkbox >>> .v-input__control .v-input__slot .v-label {
   font-size: 12px;
+}
+#table >>> .v-data-table__wrapper tbody {
+  background: url(@/assets/watermarked.png) no-repeat;
+  background-position: center;
 }
 </style>
