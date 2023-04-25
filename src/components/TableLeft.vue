@@ -1372,7 +1372,7 @@ td {
 .disabled-btn {
   background-color: transparent;
 }
-#table >>> .v-data-table__wrapper tbody {
+#table {
   background: url(@/assets/watermarked.png) no-repeat;
   background-position: center;
 }

@@ -539,7 +539,7 @@ export default {
 .checkbox >>> .v-input__control .v-input__slot .v-label {
   font-size: 12px;
 }
-#table >>> .v-data-table__wrapper tbody {
+#table {
   background: url(@/assets/watermarked.png) no-repeat;
   background-position: center;
 }

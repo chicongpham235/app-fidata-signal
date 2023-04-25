@@ -121,7 +121,6 @@ export default {
           .filter((x) => x.interval && x.state)
           .slice(0, 29);
         this.itemsTableRightDefault = [...this.itemsTableRightDefault, btc];
-        console.log(this.itemsTableRightDefault);
       } else {
         this.itemsTableRightAfter = this.items.map((x) => {
           let signals = "{}";
