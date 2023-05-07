@@ -26,7 +26,7 @@
 </template>
 
 <script>
-const TIME_REFRESH = 5 * 60 * 1000;
+const TIME_REFRESH = 30 * 60 * 1000;
 // import Popup from "./Popup.vue";
 import TableLeft from "./TableLeft.vue";
 import TableRight from "./TableRight.vue";
