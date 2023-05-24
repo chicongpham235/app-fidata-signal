@@ -211,7 +211,7 @@
       </v-card-title>
 
       <v-data-table
-        v-if="count > 1 && items.length > 0"
+        v-if="count > 1 && items.length > 0 && items.length <= 30"
         dark
         dense
         fixed-header
@@ -223,6 +223,85 @@
         hide-default-footer
         class="elevation-1"
         :id="[itemsFilter.length > 18 ? 'table' : '']"
+        :loading="loadingTable"
+      >
+        <template slot="progress">
+          <v-progress-linear
+            absolute
+            color="#6164ff"
+            indeterminate
+          ></v-progress-linear>
+        </template>
+        <template v-slot:headers="{ headers }">
+          <thead>
+            <tr>
+              <td v-for="(item, index) in headers" :key="index">
+                {{ item.text }}
+              </td>
+            </tr>
+          </thead>
+        </template>
+        <template v-slot:body="{ items }">
+          <tbody>
+            <tr
+              v-for="(item, index) in items"
+              :key="index"
+              :class="[getStatus(item) ? 'item-changed' : '']"
+            >
+              <td class="text-row">{{ item.coin_symbol }}</td>
+              <td class="text-row">
+                <span :class="getColor(getState(item.state))">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                      <span
+                        :class="[
+                          getState(item.state) == 'BULLISH'
+                            ? 'bullish-changed'
+                            : getState(item.state) == 'BEARISH'
+                            ? 'bearish-changed'
+                            : 'neutral-changed',
+                        ]"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        {{ getState(item.state) }}</span
+                      >
+                    </template>
+                    <span class="white--text"
+                      >Timestamp:
+                      {{ getTimeStampToolip(item.updated_at) }}</span
+                    >
+                  </v-tooltip>
+                </span>
+              </td>
+
+              <td class="text-row">{{ item.type }}</td>
+
+              <td class="text-row" style="color: rgb(156 163 175)">
+                {{ item.interval }}
+              </td>
+              <td class="text-row">${{ getPrice(item.coin_price) }}</td>
+              <td class="text-row" style="color: rgb(156 163 175)">
+                {{ getTimeTableRight(item.updated_at) }}
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-data-table>
+
+      <v-data-table
+        v-if="count > 1 && items.length > 30"
+        dark
+        dense
+        fixed-header
+        :headers="headers"
+        :items="itemsFilter"
+        :footer-props="{
+          'items-per-page-options': [30],
+        }"
+        hide-default-footer
+        class="elevation-1"
+        :id="[itemsFilter.length > 18 ? 'table-paginate' : '']"
         :loading="loadingTable"
       >
         <template slot="progress">
