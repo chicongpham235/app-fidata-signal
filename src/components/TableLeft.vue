@@ -23,10 +23,10 @@
         style="width: 100%; height: 48px; position: relative"
         v-if="count != 1"
       >
-        <div style="width: 50%; display: inline-block; margin-top: 4px">
+        <div style="width: 52%; display: inline-block; margin-top: 4px">
           <v-btn
             tile
-            style="height: 44px; width: 100px"
+            style="height: 44px; width: 80px"
             class="mr-1"
             :class="[state_item == 'bullish' ? 'btn-default' : '']"
             @click="
@@ -35,12 +35,12 @@
               }
             "
           >
-            <v-icon size="large" color="success">mdi-arrow-up</v-icon>
-            <span style="color: #4caf50; font-size: 12px"> BULLISH </span>
+            <v-icon size="small" color="success">mdi-arrow-up</v-icon>
+            <span style="color: #4caf50; font-size: 10px"> BULLISH </span>
           </v-btn>
           <v-btn
             tile
-            style="height: 44px; width: 100px"
+            style="height: 44px; width: 80px"
             class="mr-1"
             :class="[state_item == 'bearish' ? 'btn-default' : '']"
             @click="
@@ -49,8 +49,8 @@
               }
             "
           >
-            <v-icon size="large" color="error">mdi-arrow-down</v-icon>
-            <span style="color: #ff5252; font-size: 12px"> BEARISH </span>
+            <v-icon size="small" color="error">mdi-arrow-down</v-icon>
+            <span style="color: #ff5252; font-size: 10px"> BEARISH </span>
           </v-btn>
 
           <v-menu
@@ -63,7 +63,7 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 tile
-                style="display: inline-block; width: 100px; height: 44px"
+                style="display: inline-block; width: 80px; height: 44px"
                 v-bind="attrs"
                 v-on="on"
                 size="small"
@@ -104,7 +104,8 @@
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 tile
-                style="display: inline-block; width: 50px; height: 44px"
+                style="display: inline-block; width: 56px; height: 44px"
+                small
                 v-bind="attrs"
                 v-on="on"
                 size="small"
@@ -119,7 +120,8 @@
               </v-btn>
               <v-btn
                 tile
-                style="display: inline-block; width: 50px; height: 44px"
+                style="display: inline-block; width: 56px; height: 44px"
+                small
                 v-bind="attrs"
                 v-on="on"
                 size="small"
@@ -148,7 +150,7 @@
             </v-list>
           </v-menu>
         </div>
-        <div style="width: 3%; display: inline-block"></div>
+        <!-- <div style="width: 3%; display: inline-block"></div> -->
         <div
           style="
             width: 30%;
@@ -159,137 +161,132 @@
         >
           <v-btn
             tile
-            style="height: 44px; width: 64px"
+            style="height: 44px; width: 56px"
+            small
             class="mr-1"
             :class="[trend == true ? 'btn-selected' : '']"
             @click="onFilterTREND"
           >
-            <span style="color: rgb(97, 100, 255); font-size: 12px">
+            <span style="color: rgb(97, 100, 255); font-size: 10px">
               TREND
             </span>
           </v-btn>
           <v-btn
             tile
-            style="height: 44px; width: 64px"
+            style="height: 44px; width: 56px"
+            small
             class="mr-1"
             :class="[macd == true ? 'btn-selected' : '']"
             @click="onFilterMACD"
           >
-            <span style="color: rgb(97, 100, 255); font-size: 12px">
+            <span style="color: rgb(97, 100, 255); font-size: 10px">
               MACD
             </span></v-btn
           >
           <v-btn
             tile
-            style="height: 44px; width: 64px"
+            style="height: 44px; width: 56px"
+            small
             class="mr-1"
             :class="[rsi == true ? 'btn-selected' : '']"
             @click="onFilterRSI"
           >
-            <span style="color: rgb(97, 100, 255); font-size: 12px"> RSI </span>
+            <span style="color: rgb(97, 100, 255); font-size: 10px"> RSI </span>
           </v-btn>
         </div>
-        <div
-          style="
-            width: 170.5px;
-            display: inline-block;
-            position: absolute;
-            right: 4px;
-            top: 50%;
-            transform: translateY(-50%);
-          "
-        >
-          <v-menu
-            :close-on-click="true"
-            :close-on-content-click="false"
-            right
-            offset-y
-            :max-width="285"
+        <div style="width: 15%; display: inline-block">
+          <div
+            style="
+              width: 104px;
+              display: inline-block;
+              position: absolute;
+              right: 4px;
+              top: 50%;
+              transform: translateY(-50%);
+            "
           >
-            <template v-slot:activator="{ on, attrs }">
-              <div style="display: inline-block" v-bind="attrs" v-on="on">
-                <v-icon>mdi-magnify</v-icon>
-              </div>
-            </template>
+            <v-menu
+              :close-on-click="true"
+              :close-on-content-click="false"
+              right
+              offset-y
+              :max-width="285"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <div style="display: inline-block" v-bind="attrs" v-on="on">
+                  <v-icon>mdi-magnify</v-icon>
+                </div>
+              </template>
 
-            <v-list>
-              <v-list-item>
-                <v-text-field
-                  label="Search"
-                  append-icon="mdi-magnify"
-                  hide-details
-                  style="width: 200px; display: inline-block !important"
-                  v-model="search"
-                  color="#ffffff"
-                  autofocus
-                ></v-text-field>
-              </v-list-item>
-            </v-list>
-          </v-menu>
+              <v-list>
+                <v-list-item>
+                  <v-text-field
+                    label="Search"
+                    append-icon="mdi-magnify"
+                    hide-details
+                    style="width: 200px; display: inline-block !important"
+                    v-model="search"
+                    color="#ffffff"
+                    autofocus
+                  ></v-text-field>
+                </v-list-item>
+              </v-list>
+            </v-menu>
 
-          <v-btn class="mr-1" depressed @click="onFilterColumn()">
-            <div class="d-flex">
+            <div
+              @click="onFilterColumn()"
+              style="
+                cursor: pointer;
+                display: inline-flex;
+                position: absolute;
+                top: 50%;
+                left: calc(24px + 16px);
+                transform: translateY(-50%);
+              "
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 role="img"
                 aria-hidden="true"
                 class="v-icon__svg"
+                :style="[
+                  check_favorite ? { color: '#6164ff' } : { color: '#ffffff' },
+                ]"
               >
                 <path
                   d="M12,15.5A3.5,3.5 0 0,1 8.5,12A3.5,3.5 0 0,1 12,8.5A3.5,3.5 0 0,1 15.5,12A3.5,3.5 0 0,1 12,15.5M19.43,12.97C19.47,12.65 19.5,12.33 19.5,12C19.5,11.67 19.47,11.34 19.43,11L21.54,9.37C21.73,9.22 21.78,8.95 21.66,8.73L19.66,5.27C19.54,5.05 19.27,4.96 19.05,5.05L16.56,6.05C16.04,5.66 15.5,5.32 14.87,5.07L14.5,2.42C14.46,2.18 14.25,2 14,2H10C9.75,2 9.54,2.18 9.5,2.42L9.13,5.07C8.5,5.32 7.96,5.66 7.44,6.05L4.95,5.05C4.73,4.96 4.46,5.05 4.34,5.27L2.34,8.73C2.21,8.95 2.27,9.22 2.46,9.37L4.57,11C4.53,11.34 4.5,11.67 4.5,12C4.5,12.33 4.53,12.65 4.57,12.97L2.46,14.63C2.27,14.78 2.21,15.05 2.34,15.27L4.34,18.73C4.46,18.95 4.73,19.03 4.95,18.95L7.44,17.94C7.96,18.34 8.5,18.68 9.13,18.93L9.5,21.58C9.54,21.82 9.75,22 10,22H14C14.25,22 14.46,21.82 14.5,21.58L14.87,18.93C15.5,18.67 16.04,18.34 16.56,17.94L19.05,18.95C19.27,19.03 19.54,18.95 19.66,18.73L21.66,15.27C21.78,15.05 21.73,14.78 21.54,14.63L19.43,12.97Z"
                 ></path>
               </svg>
-              <div class="mt-auto">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  role="img"
-                  aria-hidden="true"
-                  class="v-icon__svg"
-                  style="font-size: 14px; height: 14px; width: 14px"
-                >
-                  <path
-                    d="M12,17C10.89,17 10,16.1 10,15C10,13.89 10.89,13 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
-                  ></path>
-                </svg>
-              </div>
             </div>
-          </v-btn>
 
-          <v-btn
-            depressed
-            @click="clickFavorite()"
-            :color="check_favorite ? '#6164ff' : 'default'"
-          >
-            <div class="d-flex">
+            <div
+              @click="clickFavorite()"
+              style="
+                cursor: pointer;
+                display: inline-flex;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                right: 0;
+              "
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 role="img"
                 aria-hidden="true"
                 class="v-icon__svg"
+                :style="[
+                  check_favorite ? { color: '#6164ff' } : { color: '#ffffff' },
+                ]"
               >
                 <path
                   d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
                 ></path>
               </svg>
-              <div class="mt-auto">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  role="img"
-                  aria-hidden="true"
-                  class="v-icon__svg"
-                  style="font-size: 14px; height: 14px; width: 14px"
-                >
-                  <path
-                    d="M12,17C10.89,17 10,16.1 10,15C10,13.89 10.89,13 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"
-                  ></path>
-                </svg>
-              </div>
             </div>
-          </v-btn>
+          </div>
         </div>
       </div>
 
